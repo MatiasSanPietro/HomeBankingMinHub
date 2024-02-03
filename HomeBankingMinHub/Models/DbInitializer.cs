@@ -16,6 +16,26 @@
             context.Clients.AddRange(clients);
             context.SaveChanges();
         }
-    }
+            if (!context.Account.Any())
+            {
+                var accountVictor = context.Clients.FirstOrDefault(c => c.Email == "vcoronado@gmail.com");
+                var accountVictor1 = context.Clients.FirstOrDefault(c => c.Email == "vcoronado1@gmail.com");
+                var accountVictor2 = context.Clients.FirstOrDefault(c => c.Email == "vcoronado2@gmail.com");
+                if (accountVictor != null)
+                {
+                    var accounts = new Account[]
+                    {
+                        new Account {ClientId = accountVictor.Id, CreationDate = DateTime.Now, Number = string.Empty, Balance = 0 },
+                        new Account {ClientId = accountVictor1.Id, CreationDate = DateTime.Now, Number = string.Empty, Balance = 0 },
+                        new Account {ClientId = accountVictor2.Id, CreationDate = DateTime.Now, Number = string.Empty, Balance = 0 }
+                    };
+                    foreach (Account account in accounts)
+                    {
+                        context.Account.Add(account);
+                    }
+                    context.SaveChanges();
+                }
+            }
+        }
     }
 }
