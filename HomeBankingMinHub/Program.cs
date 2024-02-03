@@ -5,17 +5,17 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add DbContext to the container
+builder.Services.AddDbContext<HomeBankingContext>(options =>
+options.UseSqlServer(builder.Configuration.GetConnectionString("HomeBankingConexion")));
+
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddControllers();
+//builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers().AddJsonOptions(x =>
 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
-
-// Add DbContext to the container
-builder.Services.AddDbContext<HomeBankingContext>(options => 
-options.UseSqlServer(builder.Configuration.GetConnectionString("HomeBankingConexion")));
 
 var app = builder.Build();
 
@@ -48,6 +48,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.MapControllers();
 
 app.MapRazorPages();
 

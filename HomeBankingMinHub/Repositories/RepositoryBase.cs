@@ -1,13 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
-using System.Linq;
-using System;
 using Microsoft.EntityFrameworkCore;
 using HomeBankingMinHub.Models;
 
 namespace HomeBankingMindHub.Repositories
 {
-
     public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
         protected HomeBankingContext RepositoryContext { get; set; }
