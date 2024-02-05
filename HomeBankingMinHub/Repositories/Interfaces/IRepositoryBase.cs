@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 
-namespace HomeBankingMindHub.Repositories
+namespace HomeBankingMinHub.Repositories.Interfaces
 {
     public interface IRepositoryBase<T>
     {

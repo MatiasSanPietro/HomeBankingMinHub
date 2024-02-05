@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using HomeBankingMinHub.Models;
+using HomeBankingMinHub.Repositories.Interfaces;
 
 namespace HomeBankingMindHub.Repositories
 {
