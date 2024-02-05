@@ -18,6 +18,7 @@ builder.Services.AddControllers().AddJsonOptions(x =>
 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddSwaggerGen(); builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 
 var app = builder.Build();
 
