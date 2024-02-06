@@ -100,9 +100,7 @@ namespace HomeBankingMindHub.Controllers
                     Password = "asd123"
                 };
 
-                _clientRepository.Create(newClient);
                 _clientRepository.Save(newClient);
-
 
                 var clientDTO = new ClientDTO
                 {
