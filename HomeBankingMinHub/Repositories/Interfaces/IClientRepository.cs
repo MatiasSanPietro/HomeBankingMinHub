@@ -7,5 +7,6 @@ namespace HomeBankingMinHub.Repositories.Interfaces
         IEnumerable<Client> GetAllClients();
         void Save(Client client);
         Client FindById(long id);
+        void Create(Client client);
     }
 }
