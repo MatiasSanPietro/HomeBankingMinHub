@@ -46,9 +46,9 @@
                     var transactions = new Transaction[]
 
                     {
-                        new Transaction { AccountId= account1.Id, Amount = 10000, Date= DateTime.Now.AddHours(-5), Description = "Transferencia reccibida", Type = TransactionType.CREDIT.ToString() },
-                        new Transaction { AccountId= account1.Id, Amount = -2000, Date= DateTime.Now.AddHours(-6), Description = "Compra en tienda mercado libre", Type = TransactionType.DEBIT.ToString() },
-                        new Transaction { AccountId= account1.Id, Amount = -3000, Date= DateTime.Now.AddHours(-7), Description = "Compra en tienda xxxx", Type = TransactionType.DEBIT.ToString() },
+                        new Transaction { AccountId= account1.Id, Amount = 10000, Date= DateTime.Now.AddHours(-5), Description = "Transferencia reccibida", Type = TransactionType.CREDIT },
+                        new Transaction { AccountId= account1.Id, Amount = -2000, Date= DateTime.Now.AddHours(-6), Description = "Compra en tienda mercado libre", Type = TransactionType.DEBIT },
+                        new Transaction { AccountId= account1.Id, Amount = -3000, Date= DateTime.Now.AddHours(-7), Description = "Compra en tienda xxxx", Type = TransactionType.DEBIT },
                     };
 
                     foreach (Transaction transaction in transactions)
@@ -135,8 +135,8 @@
                         new Card {
                             ClientId= client1.Id,
                             CardHolder = client1.FirstName + " " + client1.LastName,
-                            Type = CardType.DEBIT.ToString(),
-                            Color = CardColor.GOLD.ToString(),
+                            Type = CardType.DEBIT,
+                            Color = CardColor.GOLD,
                             Number = "3325-6745-7876-4445",
                             Cvv = 990,
                             FromDate= DateTime.Now,
@@ -145,8 +145,8 @@
                         new Card {
                             ClientId= client1.Id,
                             CardHolder = client1.FirstName + " " + client1.LastName,
-                            Type = CardType.CREDIT.ToString(),
-                            Color = CardColor.TITANIUM.ToString(),
+                            Type = CardType.CREDIT,
+                            Color = CardColor.TITANIUM,
                             Number = "2234-6745-552-7888",
                             Cvv = 750,
                             FromDate= DateTime.Now,

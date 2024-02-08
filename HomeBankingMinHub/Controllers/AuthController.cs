@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace HomeBankingMinHub.Controllers
 {
-    [Route("api/auth")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -19,15 +19,17 @@ namespace HomeBankingMinHub.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] Client client)
+        public async Task<IActionResult> Login([FromBody] Client client) //usar clientDTO
         {
             try
             {
                 Client user = _clientRepository.FindByEmail(client.Email);
                 if (user == null || !String.Equals(user.Password, client.Password))
-                    return Unauthorized();
+                    return Unauthorized(); //cambiar el mensaje por los datos no son correctos
 
-                var claims = new List<Claim>
+                //puedo agregar logica para checkear si el mail es admin, crear entidad usuario
+
+                var claims = new List<Claim> //crear validaciones
                 {
                     new Claim("Client", user.Email),
                 };
@@ -41,7 +43,7 @@ namespace HomeBankingMinHub.Controllers
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity));
 
-                return Ok();
+                return Ok(); //puedo agregar mensaje
 
             }
             catch (Exception ex)
