@@ -24,13 +24,18 @@ namespace HomeBankingMinHub.Controllers
         {
             try
             {
+                // Validaciones para login
+                if (String.IsNullOrEmpty(client.Email) || String.IsNullOrEmpty(client.Password))
+                {
+                    return StatusCode(400, "Todos los campos son obligatorios");
+                }
                 Client user = _clientRepository.FindByEmail(client.Email);
                 if (user == null || !String.Equals(user.Password, client.Password))
-                    return Unauthorized(); //cambiar el mensaje por los datos no son correctos
+                    return Unauthorized("Credenciales no validas");
 
                 //puedo agregar logica para checkear si el mail es admin, crear entidad usuario
 
-                var claims = new List<Claim> //crear validaciones
+                var claims = new List<Claim>
                 {
                     new Claim("Client", user.Email),
                 };
@@ -44,12 +49,12 @@ namespace HomeBankingMinHub.Controllers
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity));
 
-                return Ok(); //puedo agregar mensaje
+                return Ok("Inicio de sesion exitoso");
 
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, "Error interno del servidor: " + ex.Message);
             }
         }
 
@@ -60,11 +65,11 @@ namespace HomeBankingMinHub.Controllers
             {
                 await HttpContext.SignOutAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme);
-                return Ok();
+                return Ok("Cierre de sesion exitoso");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, "Error interno del servidor: " + ex.Message);
             }
         }
     }

@@ -120,54 +120,19 @@ namespace HomeBankingMindHub.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        //[HttpPost("manageradd")]
-        //public IActionResult Post([FromBody] CreateClientDTO createClientDTO)
-        //{
-        //    try
-        //    {
-        //        if (createClientDTO == null)
-        //        {
-        //            return BadRequest("El objeto CreateClientDTO es nulo");
-        //        }
-
-        //        var newClient = new Client
-        //        {
-        //            FirstName = createClientDTO.FirstName,
-        //            LastName = createClientDTO.LastName,
-        //            Email = createClientDTO.Email,
-        //            Password = "asd123"
-        //        };
-
-        //        _clientRepository.Save(newClient);
-
-        //        var clientDTO = new ClientDTO
-        //        {
-        //            Id = newClient.Id,
-        //            Email = newClient.Email,
-        //            FirstName = newClient.FirstName,
-        //            LastName = newClient.LastName
-        //        };
-
-        //        return Ok(clientDTO);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, ex.Message);
-        //    }
-        //}
         [HttpPost]
         public IActionResult Post([FromBody] Client client)
         {
             try
             {
-                //validamos datos antes
+                // Validaciones para register
                 if (String.IsNullOrEmpty(client.Email) ||
                     String.IsNullOrEmpty(client.Password) ||
                     String.IsNullOrEmpty(client.FirstName) ||
                     String.IsNullOrEmpty(client.LastName))
-                    return StatusCode(403, "datos inválidos");
+                    return StatusCode(400, "Todos los datos son obligatorios");
 
-                //buscamos si ya existe el usuario
+                // Buscamos si ya existe el usuario
                 Client user = _clientRepository.FindByEmail(client.Email);
 
                 if (user != null)
@@ -184,12 +149,20 @@ namespace HomeBankingMindHub.Controllers
                 };
 
                 _clientRepository.Save(newClient);
-                return Created("", newClient);
+
+                // codigo anterior: return Created("", newClient);
+                var response = new
+                {
+                    Message = "Usuario creado con exito",
+                    User = newClient
+                };
+
+                return Ok(response);
 
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, "Error interno del servidor: " + ex.Message);
             }
         }
         [HttpGet("current")]
@@ -248,8 +221,45 @@ namespace HomeBankingMindHub.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, "Error interno del servidor: " + ex.Message);
             }
         }
     }
 }
+
+//POST de manager
+//[HttpPost("manageradd")]
+//public IActionResult Post([FromBody] CreateClientDTO createClientDTO)
+//{
+//    try
+//    {
+//        if (createClientDTO == null)
+//        {
+//            return BadRequest("El objeto CreateClientDTO es nulo");
+//        }
+
+//        var newClient = new Client
+//        {
+//            FirstName = createClientDTO.FirstName,
+//            LastName = createClientDTO.LastName,
+//            Email = createClientDTO.Email,
+//            Password = "asd123"
+//        };
+
+//        _clientRepository.Save(newClient);
+
+//        var clientDTO = new ClientDTO
+//        {
+//            Id = newClient.Id,
+//            Email = newClient.Email,
+//            FirstName = newClient.FirstName,
+//            LastName = newClient.LastName
+//        };
+
+//        return Ok(clientDTO);
+//    }
+//    catch (Exception ex)
+//    {
+//        return StatusCode(500, ex.Message);
+//    }
+//}
