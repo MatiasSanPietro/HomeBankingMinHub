@@ -11,7 +11,7 @@ const app = new Vue({
     // load and display JSON sent by server for /clients
     loadData: function () {
       axios
-        .get("api/clients")
+        .get("/api/clients")
         .then(function (response) {
           // handle success
           app.outPut = response.data;
@@ -36,7 +36,7 @@ const app = new Vue({
     // on success, reload and display the updated data from the server
     postPlayer: function (email, firstName, lastName) {
       axios
-        .post("api/clients", {
+        .post("clients", {
           email: email,
           firstName: firstName,
           lastName: lastName,
