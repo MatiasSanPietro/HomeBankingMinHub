@@ -161,9 +161,9 @@ namespace HomeBankingMindHub.Controllers
             try
             {
                 //validamos datos antes
-                if (String.IsNullOrEmpty(client.Email) || 
-                    String.IsNullOrEmpty(client.Password) || 
-                    String.IsNullOrEmpty(client.FirstName) || 
+                if (String.IsNullOrEmpty(client.Email) ||
+                    String.IsNullOrEmpty(client.Password) ||
+                    String.IsNullOrEmpty(client.FirstName) ||
                     String.IsNullOrEmpty(client.LastName))
                     return StatusCode(403, "datos inválidos");
 

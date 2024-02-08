@@ -59,7 +59,8 @@ using (var scope = app.Services.CreateScope())
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-} else
+}
+else
 {
     app.UseSwagger();
     app.UseSwaggerUI();
