@@ -120,7 +120,7 @@ namespace HomeBankingMindHub.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        [HttpPost]
+        [HttpPost("manageradd")]
         public IActionResult Post([FromBody] CreateClientDTO createClientDTO)
         {
             try
@@ -149,6 +149,43 @@ namespace HomeBankingMindHub.Controllers
                 };
 
                 return Ok(clientDTO);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+        [HttpPost]
+        public IActionResult Post([FromBody] Client client)
+        {
+            try
+            {
+                //validamos datos antes
+                if (String.IsNullOrEmpty(client.Email) || 
+                    String.IsNullOrEmpty(client.Password) || 
+                    String.IsNullOrEmpty(client.FirstName) || 
+                    String.IsNullOrEmpty(client.LastName))
+                    return StatusCode(403, "datos inválidos");
+
+                //buscamos si ya existe el usuario
+                Client user = _clientRepository.FindByEmail(client.Email);
+
+                if (user != null)
+                {
+                    return StatusCode(403, "Email está en uso");
+                }
+
+                Client newClient = new Client
+                {
+                    Email = client.Email,
+                    Password = client.Password,
+                    FirstName = client.FirstName,
+                    LastName = client.LastName,
+                };
+
+                _clientRepository.Save(newClient);
+                return Created("", newClient);
+
             }
             catch (Exception ex)
             {
