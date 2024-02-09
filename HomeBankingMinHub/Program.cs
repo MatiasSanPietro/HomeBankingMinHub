@@ -1,6 +1,7 @@
 using HomeBankingMindHub.Repositories;
 using HomeBankingMinHub.Models;
 using HomeBankingMinHub.Repositories.Interfaces;
+using HomeBankingMinHub.Utilities;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
@@ -13,12 +14,19 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("HomeBankingConex
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddControllers().AddJsonOptions(x =>
 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve); // IgnoreCycles
+
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
+
 builder.Services.AddSwaggerGen(); builder.Services.AddSwaggerGen();
+
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+
+builder.Services.AddScoped<IHasher, Hasher>();
 
 // Authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

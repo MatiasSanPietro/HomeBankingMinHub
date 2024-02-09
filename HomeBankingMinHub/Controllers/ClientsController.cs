@@ -1,6 +1,7 @@
 ﻿using HomeBankingMinHub.Models;
 using HomeBankingMinHub.Models.DTOs;
 using HomeBankingMinHub.Repositories.Interfaces;
+using HomeBankingMinHub.Utilities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HomeBankingMindHub.Controllers
@@ -10,10 +11,12 @@ namespace HomeBankingMindHub.Controllers
     public class ClientsController : ControllerBase
     {
         private IClientRepository _clientRepository;
+        private IHasher _hasher;
 
-        public ClientsController(IClientRepository clientRepository)
+        public ClientsController(IClientRepository clientRepository, IHasher hasher)
         {
             _clientRepository = clientRepository;
+            _hasher = hasher;
         }
 
         [HttpGet]
@@ -121,7 +124,7 @@ namespace HomeBankingMindHub.Controllers
             }
         }
         [HttpPost]
-        public IActionResult Post([FromBody] Client client)
+        public IActionResult Post([FromBody] ClientRegisterDTO client)
         {
             try
             {
@@ -135,6 +138,11 @@ namespace HomeBankingMindHub.Controllers
                 // Buscamos si ya existe el usuario
                 Client user = _clientRepository.FindByEmail(client.Email);
 
+                // Hashing de contraseña
+                string salt;
+                string hashedPassword = _hasher.HashPassword(client.Password, out salt);
+
+
                 if (user != null)
                 {
                     return StatusCode(403, "Email está en uso");
@@ -143,7 +151,8 @@ namespace HomeBankingMindHub.Controllers
                 Client newClient = new Client
                 {
                     Email = client.Email,
-                    Password = client.Password,
+                    Password = hashedPassword,
+                    Salt = salt,
                     FirstName = client.FirstName,
                     LastName = client.LastName,
                 };
@@ -227,7 +236,7 @@ namespace HomeBankingMindHub.Controllers
     }
 }
 
-//POST de manager
+//POST de manager (obsoleto)
 //[HttpPost("manageradd")]
 //public IActionResult Post([FromBody] CreateClientDTO createClientDTO)
 //{

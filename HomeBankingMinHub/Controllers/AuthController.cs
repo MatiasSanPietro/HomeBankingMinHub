@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using HomeBankingMinHub.Models.DTOs;
+using HomeBankingMinHub.Utilities;
 
 namespace HomeBankingMinHub.Controllers
 {
@@ -14,9 +15,11 @@ namespace HomeBankingMinHub.Controllers
     public class AuthController : ControllerBase
     {
         private IClientRepository _clientRepository;
-        public AuthController(IClientRepository clientRepository)
+        private IHasher _hasher;
+        public AuthController(IClientRepository clientRepository, IHasher hasher)
         {
             _clientRepository = clientRepository;
+            _hasher = hasher;
         }
 
         [HttpPost("login")]
@@ -30,7 +33,7 @@ namespace HomeBankingMinHub.Controllers
                     return StatusCode(400, "Todos los campos son obligatorios");
                 }
                 Client user = _clientRepository.FindByEmail(client.Email);
-                if (user == null || !String.Equals(user.Password, client.Password))
+                if (user == null || !_hasher.VerifyPassword(client.Password, user.Password, user.Salt))
                     return Unauthorized("Credenciales no validas");
 
                 //puedo agregar logica para checkear si el mail es admin, crear entidad usuario
