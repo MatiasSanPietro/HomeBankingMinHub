@@ -135,18 +135,22 @@ namespace HomeBankingMindHub.Controllers
                     String.IsNullOrEmpty(client.LastName))
                     return StatusCode(400, "Todos los datos son obligatorios");
 
+                if (!ValidationUtils.IsValidEmail(client.Email))
+                {
+                    return StatusCode(400, "La dirección de correo electrónico no es válida");
+                }
+
                 // Buscamos si ya existe el usuario
                 Client user = _clientRepository.FindByEmail(client.Email);
-
-                // Hashing de contraseña
-                string salt;
-                string hashedPassword = _hasher.HashPassword(client.Password, out salt);
-
 
                 if (user != null)
                 {
                     return StatusCode(403, "Email está en uso");
                 }
+
+                // Hashing de contraseña
+                string salt;
+                string hashedPassword = _hasher.HashPassword(client.Password, out salt);
 
                 Client newClient = new Client
                 {
