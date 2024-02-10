@@ -29,11 +29,8 @@ namespace HomeBankingMindHub.Repositories
         {
 
             return FindByCondition(account => account.ClientId == clientId)
-
-            .Include(account => account.Transactions)
-
-            .ToList();
-
+                .Include(account => account.Transactions)
+                .ToList();
         }
 
         public void Save(Account account)
