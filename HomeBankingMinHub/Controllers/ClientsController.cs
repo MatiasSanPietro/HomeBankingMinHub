@@ -123,6 +123,7 @@ namespace HomeBankingMindHub.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
         [HttpPost]
         public IActionResult Post([FromBody] ClientRegisterDTO client)
         {
@@ -178,6 +179,7 @@ namespace HomeBankingMindHub.Controllers
                 return StatusCode(500, "Error interno del servidor: " + ex.Message);
             }
         }
+
         [HttpGet("current")]
         public IActionResult GetCurrent()
         {
