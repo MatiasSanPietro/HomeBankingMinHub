@@ -1,9 +1,7 @@
-﻿using HomeBankingMindHub.Repositories;
-using HomeBankingMinHub.Models;
+﻿using HomeBankingMinHub.Models;
 using HomeBankingMinHub.Models.DTOs;
 using HomeBankingMinHub.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 
 namespace HomeBankingMindHub.Controllers
 {
@@ -160,7 +158,6 @@ namespace HomeBankingMindHub.Controllers
 
                 _accountRepository.Save(newAccount);
 
-                // Preguntarle al profesor si es necesario hacer un AccountCreateDTO o si es mejor usar el AccountDTO
                 AccountCreateDTO newAccountDTO = new AccountCreateDTO
                 {
                     Number = newAccount.Number,
