@@ -1,5 +1,6 @@
 using HomeBankingMindHub.Repositories;
 using HomeBankingMinHub.Models;
+using HomeBankingMinHub.Repositories;
 using HomeBankingMinHub.Repositories.Interfaces;
 using HomeBankingMinHub.Utilities;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -27,6 +28,8 @@ builder.Services.AddSwaggerGen(); builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 
 builder.Services.AddScoped<IHasher, Hasher>();
+
+builder.Services.AddScoped<ICardRepository, CardRepository>();
 
 // Authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

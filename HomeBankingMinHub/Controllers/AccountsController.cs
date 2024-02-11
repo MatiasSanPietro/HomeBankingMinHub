@@ -142,12 +142,17 @@ namespace HomeBankingMindHub.Controllers
                     return StatusCode(403, "Un cliente no puede tener mas de 3 cuentas");
                 }
 
-                Random random = new();
-                string randomNum = random.Next(0, 100000000).ToString("D8");
+                string GenerateRandomNumber()
+                {
+                    Random random = new Random();
+                    return random.Next(0, 100000000).ToString("D8");
+                }
+
+                string randomNum = GenerateRandomNumber();
 
                 Account newAccount = new Account
                 {
-                    Number = "VIN-" + randomNum,
+                    Number = $"VIN-{randomNum}",
                     CreationDate = DateTime.Now,
                     Balance = 0,
                     ClientId = client.Id,
