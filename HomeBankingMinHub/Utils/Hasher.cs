@@ -3,7 +3,7 @@ using System.Text;
 
 namespace HomeBankingMinHub.Models
 {
-    public class Hasher : Utilities.IHasher
+    public class Hasher : Utils.IHasher
     {
         public string HashPassword(string password, out string salt)
         {

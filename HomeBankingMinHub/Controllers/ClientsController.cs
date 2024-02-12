@@ -1,7 +1,7 @@
 ﻿using HomeBankingMinHub.Models;
 using HomeBankingMinHub.Models.DTOs;
 using HomeBankingMinHub.Repositories.Interfaces;
-using HomeBankingMinHub.Utilities;
+using HomeBankingMinHub.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HomeBankingMindHub.Controllers

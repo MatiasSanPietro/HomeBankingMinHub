@@ -1,6 +1,6 @@
 ﻿using System.Net.Mail;
 
-namespace HomeBankingMinHub.Utilities
+namespace HomeBankingMinHub.Utils
 {
     public static class ValidationUtils
     {
