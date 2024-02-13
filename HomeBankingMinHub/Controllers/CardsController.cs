@@ -75,9 +75,18 @@ namespace HomeBankingMinHub.Controllers
                     return Forbid();
                 }
 
-                if (client.Cards.Count > 2)
+                // Encapsular en un metodo
+                // Cuento los tipos de tarjeta, veo que tipo de tarjeta quiero agregar,
+                // checkeo si la cantidad del tipo de tarjeta es 3 o mas
+                int debitCardCount = client.Cards.Count(c => c.Type == CardType.DEBIT);
+                int creditCardCount = client.Cards.Count(c => c.Type == CardType.CREDIT);
+
+                CardType newCardType = Enum.Parse<CardType>(card.Type);
+
+                if ((newCardType == CardType.DEBIT && debitCardCount >= 3) ||
+                    (newCardType == CardType.CREDIT && creditCardCount >= 3))
                 {
-                    return StatusCode(403, "Un cliente no puede tener mas de 3 tarjetas");
+                    return StatusCode(403, "El cliente ha alcanzado el limite de tarjetas para este tipo");
                 }
 
                 string GenerateCardNumber()
@@ -87,8 +96,6 @@ namespace HomeBankingMinHub.Controllers
 
                     for (int i = 0; i < 4; i++)
                     {
-                        //string section = random.Next(0, 10000).ToString("D4");
-                        //cardNumber.Append(section + " ");
                         cardNumber.AppendFormat("{0:D4} ", random.Next(0, 10000));
                     }
 
