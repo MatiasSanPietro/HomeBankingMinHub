@@ -33,7 +33,7 @@ namespace HomeBankingMinHub.Controllers
                 }
                 Client user = _clientRepository.FindByEmail(client.Email);
                 if (user == null || !_hasher.VerifyPassword(client.Password, user.Password, user.Salt))
-                    return Unauthorized("Credenciales no validas");
+                    return Unauthorized("Credenciales no validas"); // 401
 
                 //puedo agregar logica para checkear si el mail es admin, crear entidad usuario
 

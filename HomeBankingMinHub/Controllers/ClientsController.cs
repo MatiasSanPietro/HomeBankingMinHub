@@ -68,7 +68,7 @@ namespace HomeBankingMindHub.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, "Error interno del servidor: " + ex.Message);
             }
         }
 
@@ -80,7 +80,7 @@ namespace HomeBankingMindHub.Controllers
                 var client = _clientRepository.FindById(id);
                 if (client == null)
                 {
-                    return Forbid();
+                    return StatusCode(403, "El cliente no existe");
                 }
 
                 var clientDTO = new ClientDTO
@@ -120,7 +120,7 @@ namespace HomeBankingMindHub.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, "Error interno del servidor: " + ex.Message);
             }
         }
 
@@ -188,7 +188,7 @@ namespace HomeBankingMindHub.Controllers
                 string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
                 if (email == string.Empty)
                 {
-                    return Forbid();
+                    return StatusCode(403, "No hay clientes logeados");
                 }
 
                 Client client = _clientRepository.FindByEmail(email);

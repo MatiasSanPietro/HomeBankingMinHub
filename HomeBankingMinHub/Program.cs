@@ -23,7 +23,7 @@ x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve); // Ignore
 
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 
-builder.Services.AddSwaggerGen(); builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 

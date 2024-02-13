@@ -44,7 +44,7 @@ namespace HomeBankingMindHub.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, "Error interno del servidor: " + ex.Message);
             }
         }
 
@@ -56,7 +56,7 @@ namespace HomeBankingMindHub.Controllers
                 var account = _accountRepository.FindById(id);
                 if (account == null)
                 {
-                    return Forbid();
+                    return StatusCode(403, "La cuenta no existe");
                 }
 
                 var accountDTO = new AccountDTO
@@ -79,7 +79,7 @@ namespace HomeBankingMindHub.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, "Error interno del servidor: " + ex.Message);
             }
         }
         [HttpGet("clients/current/accounts")]
@@ -90,7 +90,7 @@ namespace HomeBankingMindHub.Controllers
                 string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
                 if (email == string.Empty)
                 {
-                    return Forbid();
+                    return StatusCode(403, "No hay clientes logeados");
                 }
 
                 Client client = _clientRepository.FindByEmail(email);
@@ -112,7 +112,7 @@ namespace HomeBankingMindHub.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, "Error interno del servidor: " + ex.Message);
             }
         }
 
@@ -124,7 +124,7 @@ namespace HomeBankingMindHub.Controllers
                 string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
                 if (email == string.Empty)
                 {
-                    return Forbid();
+                    return StatusCode(403, "No hay clientes logeados");
                 }
 
                 // Buscamos si ya existe el usuario
@@ -137,16 +137,16 @@ namespace HomeBankingMindHub.Controllers
 
                 if (client.Accounts.Count > 2)
                 {
-                    return StatusCode(403, "Un cliente no puede tener mas de 3 cuentas");
+                    return StatusCode(403, "El cliente ha alcanzado el limite de cuentas");
                 }
 
-                string GenerateRandomNumber()
+                string GenerateAccountNumber()
                 {
                     Random random = new Random();
                     return random.Next(0, 100000000).ToString("D8");
                 }
 
-                string randomNum = GenerateRandomNumber();
+                string randomNum = GenerateAccountNumber();
 
                 Account newAccount = new Account
                 {
@@ -170,7 +170,7 @@ namespace HomeBankingMindHub.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, "Error interno del servidor: " + ex.Message);
             }
         }
     }

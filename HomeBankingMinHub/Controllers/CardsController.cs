@@ -27,7 +27,7 @@ namespace HomeBankingMinHub.Controllers
                 string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
                 if (email == string.Empty)
                 {
-                    return Forbid();
+                    return StatusCode(403, "No hay clientes logeados");
                 }
 
                 Client client = _clientRepository.FindByEmail(email);
@@ -53,7 +53,7 @@ namespace HomeBankingMinHub.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, "Error interno del servidor: " + ex.Message);
             }
         }
 
@@ -65,7 +65,7 @@ namespace HomeBankingMinHub.Controllers
                 string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
                 if (email == string.Empty)
                 {
-                    return Forbid();
+                    return StatusCode(403, "No hay clientes logeados");
                 }
 
                 Client client = _clientRepository.FindByEmail(email);
@@ -75,18 +75,22 @@ namespace HomeBankingMinHub.Controllers
                     return Forbid();
                 }
 
-                // Encapsular en un metodo
                 // Cuento los tipos de tarjeta, veo que tipo de tarjeta quiero agregar,
-                // checkeo si la cantidad del tipo de tarjeta es 3 o mas
-                int debitCardCount = client.Cards.Count(c => c.Type == CardType.DEBIT);
-                int creditCardCount = client.Cards.Count(c => c.Type == CardType.CREDIT);
-
-                CardType newCardType = Enum.Parse<CardType>(card.Type);
-
-                if ((newCardType == CardType.DEBIT && debitCardCount >= 3) ||
-                    (newCardType == CardType.CREDIT && creditCardCount >= 3))
+                // checkeo si la cantidad del tipo de tarjeta es mayor a 2
+                bool CheckCardTypeLimit(Client client, CardDTO card)
                 {
-                    return StatusCode(403, "El cliente ha alcanzado el limite de tarjetas para este tipo");
+                    int debitCardCount = client.Cards.Count(c => c.Type == CardType.DEBIT);
+                    int creditCardCount = client.Cards.Count(c => c.Type == CardType.CREDIT);
+
+                    CardType newCardType = Enum.Parse<CardType>(card.Type);
+
+                    return (newCardType == CardType.DEBIT && debitCardCount > 2) ||
+                           (newCardType == CardType.CREDIT && creditCardCount > 2);
+                }
+
+                if (CheckCardTypeLimit(client, card))
+                {
+                    return StatusCode(403, "El cliente ha alcanzado el límite de tarjetas para este tipo");
                 }
 
                 string GenerateCardNumber()
@@ -141,7 +145,7 @@ namespace HomeBankingMinHub.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, "Error interno del servidor: " + ex.Message);
             }
         }
     }
