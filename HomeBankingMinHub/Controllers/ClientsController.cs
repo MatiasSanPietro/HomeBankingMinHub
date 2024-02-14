@@ -1,9 +1,11 @@
-﻿using HomeBankingMinHub.Models;
+﻿using HomeBankingMindHub.Repositories;
+using HomeBankingMinHub.Models;
 using HomeBankingMinHub.Models.DTOs;
 using HomeBankingMinHub.Repositories.Interfaces;
 using HomeBankingMinHub.Utils;
 using HomeBankingMinHub.Utils.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Principal;
 
 namespace HomeBankingMindHub.Controllers
 {
@@ -12,11 +14,13 @@ namespace HomeBankingMindHub.Controllers
     public class ClientsController : ControllerBase
     {
         private IClientRepository _clientRepository;
+        private IAccountRepository _accountRepository;
         private IHasher _hasher;
 
-        public ClientsController(IClientRepository clientRepository, IHasher hasher)
+        public ClientsController(IClientRepository clientRepository, IAccountRepository accountRepository,IHasher hasher)
         {
             _clientRepository = clientRepository;
+            _accountRepository = accountRepository;
             _hasher = hasher;
         }
 
@@ -165,14 +169,29 @@ namespace HomeBankingMindHub.Controllers
 
                 _clientRepository.Save(newClient);
 
+                // Crear cuenta al registrarse
+                var dbUser = _clientRepository.FindByEmail(newClient.Email);
+
+                if (dbUser == null)
+                    return StatusCode(403, "Error al crear la cuenta, no hay cliente registrado");
+
+                Account newAccount = new Account
+                {
+                    ClientId = dbUser.Id,
+                    CreationDate = DateTime.Now,
+                    Balance = 0
+                };
+
+                _accountRepository.Save(newAccount);
+
                 // codigo anterior: return Created("", newClient);
                 var response = new
                 {
-                    Message = "Usuario creado con exito",
-                    User = newClient
+                    Message = "Usuario y cuenta creados con exito",
+                    User = newClient,
+                    Account = newAccount
                 };
-
-                return Ok(response);
+                return StatusCode(201, response);
 
             }
             catch (Exception ex)
