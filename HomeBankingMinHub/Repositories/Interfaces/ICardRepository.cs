@@ -8,5 +8,6 @@ namespace HomeBankingMinHub.Repositories.Interfaces
         Card FindById(long id);
         void Save(Card card);
         IEnumerable<Card> GetCardsByClient(long clientId);
+        Card FindByNum(string number);
     }
 }

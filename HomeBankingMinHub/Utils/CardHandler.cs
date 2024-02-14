@@ -11,7 +11,11 @@ namespace HomeBankingMinHub.Utils
 
             for (int i = 0; i < 4; i++)
             {
-                cardNumber.AppendFormat("{0:D4} ", random.Next(0, 10000));
+                cardNumber.AppendFormat("{0:D4}", random.Next(0, 10000));
+                if (i < 3)
+                {
+                    cardNumber.Append('-');
+                }
             }
             return cardNumber.ToString().Trim();
         }

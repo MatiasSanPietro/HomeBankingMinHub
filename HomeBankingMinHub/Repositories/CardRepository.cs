@@ -1,6 +1,8 @@
 ﻿using HomeBankingMindHub.Repositories;
 using HomeBankingMinHub.Models;
 using HomeBankingMinHub.Repositories.Interfaces;
+using HomeBankingMinHub.Utils;
+using Microsoft.EntityFrameworkCore;
 
 namespace HomeBankingMinHub.Repositories
 {
@@ -26,8 +28,29 @@ namespace HomeBankingMinHub.Repositories
                 .ToList();
         }
 
+        public Card FindByNum(string number)
+        {
+            return FindByCondition(card => card.Number == number)
+                .FirstOrDefault();
+        }
+
         public void Save(Card card)
         {
+            bool condition = true;
+            string num = string.Empty;
+
+            while (condition)
+            {
+                num = CardHandler.GenerateCardNumber();
+
+                var acc = FindByNum(num);
+
+                if (acc == null)
+                {
+                    condition = false;
+                }
+            }
+            card.Number = num;
             Create(card);
             SaveChanges();
         }

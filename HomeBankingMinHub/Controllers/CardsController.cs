@@ -93,25 +93,6 @@ namespace HomeBankingMinHub.Controllers
                     return StatusCode(403, "El cliente ha alcanzado el límite de tarjetas para este tipo");
                 }
 
-                string GenerateCardNumber()
-                {
-                    Random random = new();
-                    StringBuilder cardNumber = new StringBuilder();
-
-                    for (int i = 0; i < 4; i++)
-                    {
-                        cardNumber.AppendFormat("{0:D4}", random.Next(0, 10000));
-                        if (i < 3)
-                        {
-                            cardNumber.Append('-');
-                        }
-                    }
-
-                    return cardNumber.ToString().Trim();
-                }
-
-                string numCard = GenerateCardNumber();
-
                 int GenerateCVV()
                 {
                     Random random = new();
@@ -126,7 +107,6 @@ namespace HomeBankingMinHub.Controllers
                     CardHolder = $"{client.FirstName} {client.LastName}",
                     Type = Enum.Parse<CardType>(card.Type),
                     Color = Enum.Parse<CardColor>(card.Color),
-                    Number = numCard,
                     Cvv = cvvNum,
                     FromDate = DateTime.Now,
                     ThruDate = DateTime.Now.AddYears(5),
