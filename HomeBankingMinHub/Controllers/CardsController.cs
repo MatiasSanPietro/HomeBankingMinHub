@@ -3,6 +3,7 @@ using HomeBankingMinHub.Models;
 using HomeBankingMinHub.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
+using HomeBankingMinHub.Utils;
 
 namespace HomeBankingMinHub.Controllers
 {
@@ -75,31 +76,12 @@ namespace HomeBankingMinHub.Controllers
                     return Forbid();
                 }
 
-                // Cuento los tipos de tarjeta, veo que tipo de tarjeta quiero agregar,
-                // checkeo si la cantidad del tipo de tarjeta es mayor a 2
-                bool CheckCardTypeLimit(Client client, CardDTO card)
-                {
-                    int debitCardCount = client.Cards.Count(c => c.Type == CardType.DEBIT);
-                    int creditCardCount = client.Cards.Count(c => c.Type == CardType.CREDIT);
-
-                    CardType newCardType = Enum.Parse<CardType>(card.Type);
-
-                    return (newCardType == CardType.DEBIT && debitCardCount > 2) ||
-                           (newCardType == CardType.CREDIT && creditCardCount > 2);
-                }
-
-                if (CheckCardTypeLimit(client, card))
+                if (CardValidations.CheckCardTypeLimit(client, card))
                 {
                     return StatusCode(403, "El cliente ha alcanzado el límite de tarjetas para este tipo");
                 }
 
-                int GenerateCVV()
-                {
-                    Random random = new();
-                    return random.Next(100, 1000);
-                }
-
-                int cvvNum = GenerateCVV();
+                int cvvNum = CardValidations.GenerateCVV();
 
                 Card newCard = new Card()
                 {

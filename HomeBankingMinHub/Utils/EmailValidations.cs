@@ -2,7 +2,7 @@
 
 namespace HomeBankingMinHub.Utils
 {
-    public static class ValidationUtils
+    public static class EmailValidations
     {
         public static bool IsValidEmail(string email)
         {

@@ -137,7 +137,7 @@ namespace HomeBankingMindHub.Controllers
                     String.IsNullOrEmpty(client.LastName))
                     return StatusCode(400, "Todos los datos son obligatorios");
 
-                if (!ValidationUtils.IsValidEmail(client.Email))
+                if (!EmailValidations.IsValidEmail(client.Email))
                 {
                     return StatusCode(400, "La dirección de correo electrónico no es válida");
                 }
