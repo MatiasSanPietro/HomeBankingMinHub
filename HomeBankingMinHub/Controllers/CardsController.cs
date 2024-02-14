@@ -81,6 +81,11 @@ namespace HomeBankingMinHub.Controllers
                     return StatusCode(403, "El cliente ha alcanzado el límite de tarjetas para este tipo");
                 }
 
+                if (!CardValidations.CheckUniqueColorPerCardType(client, card))
+                {
+                    return StatusCode(403, "Ya existe una tarjeta con el mismo tipo y color");
+                }
+
                 int cvvNum = CardValidations.GenerateCVV();
 
                 Card newCard = new Card()
