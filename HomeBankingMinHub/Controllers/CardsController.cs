@@ -91,7 +91,7 @@ namespace HomeBankingMinHub.Controllers
                     Color = Enum.Parse<CardColor>(card.Color),
                     Cvv = cvvNum,
                     FromDate = DateTime.Now,
-                    ThruDate = DateTime.Now.AddYears(5),
+                    ThruDate = (card.Type == CardType.DEBIT.ToString()) ? DateTime.Now.AddYears(4) : DateTime.Now.AddYears(5),
                 };
 
                 _cardRepository.Save(newCard);
