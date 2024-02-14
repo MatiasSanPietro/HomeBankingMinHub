@@ -1,9 +1,10 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using HomeBankingMinHub.Utils.Interfaces;
 
 namespace HomeBankingMinHub.Models
 {
-    public class Hasher : Utils.IHasher
+    public class Hasher : IHasher
     {
         public string HashPassword(string password, out string salt)
         {

@@ -1,5 +1,6 @@
 ﻿using HomeBankingMinHub.Models;
 using HomeBankingMinHub.Repositories.Interfaces;
+using HomeBankingMinHub.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace HomeBankingMindHub.Repositories
@@ -32,9 +33,30 @@ namespace HomeBankingMindHub.Repositories
                 .Include(account => account.Transactions)
                 .ToList();
         }
+        public Account FindByVIN(string VIN)
+        {
+            return FindByCondition(acc => acc.Number == VIN)
+                .Include(acc => acc.Transactions)
+                .FirstOrDefault();
+        }
 
         public void Save(Account account)
         {
+            bool condition = true;
+            string vin = string.Empty;
+
+            while (condition)
+            {
+                vin = AccountHandler.GenerateAccountNumber();
+
+                var acc = FindByVIN(vin);
+
+                if (acc == null)
+                {
+                    condition = false;
+                }
+            }
+            account.Number = vin;
             Create(account);
             SaveChanges();
         }

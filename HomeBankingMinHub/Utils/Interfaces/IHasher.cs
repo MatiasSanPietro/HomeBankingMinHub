@@ -1,4 +1,4 @@
-﻿namespace HomeBankingMinHub.Utils
+﻿namespace HomeBankingMinHub.Utils.Interfaces
 {
     public interface IHasher
     {

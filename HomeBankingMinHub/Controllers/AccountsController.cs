@@ -140,17 +140,8 @@ namespace HomeBankingMindHub.Controllers
                     return StatusCode(403, "El cliente ha alcanzado el limite de cuentas");
                 }
 
-                string GenerateAccountNumber()
-                {
-                    Random random = new Random();
-                    return random.Next(0, 100000000).ToString("D8");
-                }
-
-                string randomNum = GenerateAccountNumber();
-
                 Account newAccount = new Account
                 {
-                    Number = $"VIN-{randomNum}",
                     CreationDate = DateTime.Now,
                     Balance = 0,
                     ClientId = client.Id,
@@ -160,7 +151,6 @@ namespace HomeBankingMindHub.Controllers
 
                 AccountCreateDTO newAccountDTO = new AccountCreateDTO
                 {
-                    Number = newAccount.Number,
                     CreationDate = newAccount.CreationDate,
                     Balance = 0,
                 };

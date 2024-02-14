@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using HomeBankingMinHub.Models.DTOs;
-using HomeBankingMinHub.Utils;
+using HomeBankingMinHub.Utils.Interfaces;
 
 namespace HomeBankingMinHub.Controllers
 {
