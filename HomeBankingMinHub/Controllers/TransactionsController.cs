@@ -89,6 +89,16 @@ namespace HomeBankingMinHub.Controllers
                     Date = DateTime.Now,
                 });
 
+                // Ahora una credito para la cuenta fromAccount
+                _transactionRepository.Save(new Transaction
+                {
+                    Type = TransactionType.CREDIT,
+                    Amount = transferDTO.Amount,
+                    Description = $"{transferDTO.Description} {fromAccount.Number}",
+                    AccountId = toAccount.Id,
+                    Date = DateTime.Now,
+                });
+
                 // Seteamos los valores de las cuentas, a la cuenta de origen le restamos el monto
                 // actualizamos la cuenta de origen
                 fromAccount.Balance = fromAccount.Balance - transferDTO.Amount;
