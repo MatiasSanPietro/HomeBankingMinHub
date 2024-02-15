@@ -1,9 +1,7 @@
 ﻿using HomeBankingMinHub.Models;
 using HomeBankingMinHub.Models.DTOs;
 using HomeBankingMinHub.Repositories.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HomeBankingMinHub.Controllers
 {

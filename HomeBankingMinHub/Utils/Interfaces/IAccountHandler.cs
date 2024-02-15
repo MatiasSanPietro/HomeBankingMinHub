@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace HomeBankingMinHub.Utils.Interfaces
+﻿namespace HomeBankingMinHub.Utils.Interfaces
 {
     public interface IAccountHandler
     {
