@@ -6,7 +6,7 @@ namespace HomeBankingMinHub.Repositories
 {
     public class ClientLoanRepository : RepositoryBase<ClientLoan>, IClientLoanRepository
     {
-        public ClientLoanRepository(HomeBankingContext repositoryContext) : base(repositoryContext { }
+        public ClientLoanRepository(HomeBankingContext repositoryContext) : base(repositoryContext) { }
 
         public void Save(ClientLoan clientLoan)
         {
