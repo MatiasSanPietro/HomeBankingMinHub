@@ -33,9 +33,9 @@ namespace HomeBankingMindHub.Repositories
                 .Include(account => account.Transactions)
                 .ToList();
         }
-        public Account FindByVIN(string VIN)
+        public Account FindByNumber(string number)
         {
-            return FindByCondition(acc => acc.Number == VIN)
+            return FindByCondition(acc => acc.Number.ToUpper() == number.ToUpper())
                 .Include(acc => acc.Transactions)
                 .FirstOrDefault();
         }
@@ -49,7 +49,7 @@ namespace HomeBankingMindHub.Repositories
             {
                 vin = AccountHandler.GenerateAccountNumber();
 
-                var acc = FindByVIN(vin);
+                var acc = FindByNumber(vin);
 
                 if (acc == null)
                 {
@@ -57,7 +57,15 @@ namespace HomeBankingMindHub.Repositories
                 }
             }
             account.Number = vin;
-            Create(account);
+
+            if (account.Id == 0)
+            {
+                Create(account);
+            }
+            else
+            {
+                Update(account);
+            }
             SaveChanges();
         }
     }
