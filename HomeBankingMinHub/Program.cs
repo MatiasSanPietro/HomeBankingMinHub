@@ -31,6 +31,8 @@ builder.Services.AddScoped<IHasher, Hasher>();
 
 builder.Services.AddScoped<ICardRepository, CardRepository>();
 
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+
 // Authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
