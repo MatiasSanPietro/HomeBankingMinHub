@@ -29,14 +29,14 @@ namespace HomeBankingMinHub.Controllers
                 string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
                 if (email == string.Empty)
                 {
-                    return Forbid("Email vacío");
+                    return Forbid("No hay clientes logeados");
                 }
 
                 Client client = _clientRepository.FindByEmail(email);
 
                 if (client == null)
                 {
-                    return Forbid("No existe el cliente");
+                    return Forbid();
                 }
 
                 if (transferDTO.FromAccountNumber == string.Empty || transferDTO.ToAccountNumber == string.Empty)
@@ -51,7 +51,7 @@ namespace HomeBankingMinHub.Controllers
 
                 if (transferDTO.Amount == 0 || transferDTO.Description == string.Empty)
                 {
-                    return Forbid("Monto o descripción no proporcionados.");
+                    return Forbid("Monto o descripcion no proporcionados.");
                 }
 
                 //buscamos las cuentas
@@ -96,7 +96,7 @@ namespace HomeBankingMinHub.Controllers
                     Date = DateTime.Now,
                 });
 
-                //seteamos los valores de las cuentas, a la ccuenta de origen le restamos el monto
+                //seteamos los valores de las cuentas, a la cuenta de origen le restamos el monto
                 fromAccount.Balance = fromAccount.Balance - transferDTO.Amount;
                 //actualizamos la cuenta de origen
                 _accountRepository.Save(fromAccount);
@@ -106,7 +106,7 @@ namespace HomeBankingMinHub.Controllers
                 //actualizamos la cuenta de destino
                 _accountRepository.Save(toAccount);
 
-                return Created("Creado con éxito", fromAccount);
+                return Created("Creado con exito", fromAccount);
 
             }
             catch (Exception ex)
