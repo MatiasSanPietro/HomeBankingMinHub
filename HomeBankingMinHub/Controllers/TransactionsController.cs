@@ -53,7 +53,6 @@ namespace HomeBankingMinHub.Controllers
                     return StatusCode(403, "Monto o descripcion no proporcionados");
                 }
 
-
                 Account fromAccount = _accountRepository.FindByNumber(transferDTO.FromAccountNumber);
 
                 if (fromAccount == null)
