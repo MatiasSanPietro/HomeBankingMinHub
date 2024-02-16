@@ -27,7 +27,7 @@ namespace HomeBankingMinHub.Controllers
             try
             {
                 string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
-                if (email == string.Empty)
+                if (string.IsNullOrEmpty(email))
                 {
                     return StatusCode(403, "No hay clientes logeados");
                 }
@@ -48,11 +48,15 @@ namespace HomeBankingMinHub.Controllers
                     return StatusCode(403, "No se permite la transferencia a la misma cuenta");
                 }
 
-                if (transferDTO.Amount == 0 || transferDTO.Description == string.Empty)
+                if (transferDTO.Description == string.Empty)
                 {
-                    return StatusCode(403, "Monto o descripcion no proporcionados");
+                    return StatusCode(403, "Descripcion no proporcionada");
                 }
 
+                if (transferDTO.Amount < 0)
+                {
+                    return StatusCode(403, "Monto no valido");
+                }
 
                 Account fromAccount = _accountRepository.FindByNumber(transferDTO.FromAccountNumber);
 
