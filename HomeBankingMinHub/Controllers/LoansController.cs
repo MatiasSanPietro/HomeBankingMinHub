@@ -15,7 +15,7 @@ namespace HomeBankingMinHub.Controllers
         private IClientLoanRepository _clientLoanRepository;
         private ITransactionRepository _transactionRepository;
 
-        public LoansController (IClientRepository clientRepository, IAccountRepository accountRepository, ILoanRepository loanRepository, IClientLoanRepository clientLoanRepository, ITransactionRepository transactionRepository)
+        public LoansController(IClientRepository clientRepository, IAccountRepository accountRepository, ILoanRepository loanRepository, IClientLoanRepository clientLoanRepository, ITransactionRepository transactionRepository)
         {
             _clientRepository = clientRepository;
             _accountRepository = accountRepository;
@@ -47,7 +47,7 @@ namespace HomeBankingMinHub.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode (500, "Error interno del servidor: " + ex.Message);
+                return StatusCode(500, "Error interno del servidor: " + ex.Message);
             }
         }
         [HttpPost]
@@ -56,7 +56,7 @@ namespace HomeBankingMinHub.Controllers
             try
             {
                 string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
-                if (email == string.Empty)
+                if (String.IsNullOrEmpty(email))
                 {
                     return StatusCode(403, "No hay clientes logeados");
                 }
@@ -67,7 +67,7 @@ namespace HomeBankingMinHub.Controllers
                     return Forbid();
                 }
 
-                if (loanApplicationDTO.Amount < 1)
+                if (loanApplicationDTO.Amount <= 0)
                 {
                     return StatusCode(403, "El monto del prestamo no puede ser 0");
                 }
@@ -82,19 +82,36 @@ namespace HomeBankingMinHub.Controllers
                     return StatusCode(403, "Debe elegir la cantidad de pagos");
                 }
 
+                long[] allowedLoanIds = [1, 2, 3];
+
+                if (!allowedLoanIds.Contains(loanApplicationDTO.LoanId))
+                {
+                    return StatusCode(403, "Tipo de prestamo no valido");
+                }
+
                 var loan = _loanRepository.FindById(loanApplicationDTO.LoanId);
 
-                if (loan == null) // Cambiar esto y verificar que cuenta de destino exista
+                if (loan == null)
                 {
-                    return StatusCode(403, "Debe elegir un tipo de prestamo valido");
+                    return Forbid();
+                }
+
+                if (!loan.Payments.Split(',').Contains(loanApplicationDTO.Payments))
+                {
+                    return StatusCode(403, "Cantidad de cuotas no validas");
                 }
 
                 if (loanApplicationDTO.Amount >= loan.MaxAmount)
                 {
-                    return StatusCode(403, $"El monto no puede sobrepasar el maximo autorizado de: ${loan.MaxAmount}");
+                    return StatusCode(403, "El monto no puede sobrepasar el maximo autorizado");
                 }
 
                 var account = _accountRepository.FindByNumber(loanApplicationDTO.ToAccountNumber);
+
+                if (account == null || account.ClientId != client.Id)
+                {
+                    return StatusCode(403, "La cuenta del cliente no existe");
+                }
 
                 Account updatedAccount = account;
                 updatedAccount.Balance = account.Balance + loanApplicationDTO.Amount;
@@ -102,19 +119,19 @@ namespace HomeBankingMinHub.Controllers
                 ClientLoan newClientLoan = new ClientLoan
                 {
                     ClientId = client.Id,
-                    Amount = loanApplicationDTO.Amount + loanApplicationDTO.Amount * 0.2,
-                    Payments = loanApplicationDTO.Payments,
                     LoanId = loanApplicationDTO.LoanId,
+                    Amount = loanApplicationDTO.Amount + (loanApplicationDTO.Amount * 0.2),
+                    Payments = loanApplicationDTO.Payments,
                 };
                 _clientLoanRepository.Save(newClientLoan);
 
                 Transaction newTransaction = new Transaction
                 {
-                    AccountId = account.Id,
                     Amount = loanApplicationDTO.Amount,
-                    Date = DateTime.Now,
                     Description = $"{loan.Name} loan approved",
                     Type = TransactionType.CREDIT,
+                    AccountId = account.Id,
+                    Date = DateTime.Now,
                 };
                 _transactionRepository.Save(newTransaction);
                 _accountRepository.Save(account);
