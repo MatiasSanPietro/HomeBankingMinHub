@@ -135,10 +135,10 @@ namespace HomeBankingMindHub.Controllers
             try
             {
                 // Validaciones para register
-                if (String.IsNullOrEmpty(client.Email) ||
-                    String.IsNullOrEmpty(client.Password) ||
-                    String.IsNullOrEmpty(client.FirstName) ||
-                    String.IsNullOrEmpty(client.LastName))
+                if (string.IsNullOrEmpty(client.Email) ||
+                    string.IsNullOrEmpty(client.Password) ||
+                    string.IsNullOrEmpty(client.FirstName) ||
+                    string.IsNullOrEmpty(client.LastName))
                     return StatusCode(400, "Todos los datos son obligatorios");
 
                 if (!EmailValidations.IsValidEmail(client.Email))
@@ -206,7 +206,7 @@ namespace HomeBankingMindHub.Controllers
             try
             {
                 string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
-                if (email == string.Empty)
+                if (string.IsNullOrEmpty(email))
                 {
                     return StatusCode(403, "No hay clientes logeados");
                 }

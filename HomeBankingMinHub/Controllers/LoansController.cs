@@ -56,7 +56,7 @@ namespace HomeBankingMinHub.Controllers
             try
             {
                 string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
-                if (String.IsNullOrEmpty(email))
+                if (string.IsNullOrEmpty(email))
                 {
                     return StatusCode(403, "No hay clientes logeados");
                 }
@@ -108,7 +108,12 @@ namespace HomeBankingMinHub.Controllers
 
                 var account = _accountRepository.FindByNumber(loanApplicationDTO.ToAccountNumber);
 
-                if (account == null || account.ClientId != client.Id)
+                if (account == null)
+                {
+                    return Forbid();
+                }
+
+                if (account.ClientId != client.Id)
                 {
                     return StatusCode(403, "La cuenta del cliente no existe");
                 }

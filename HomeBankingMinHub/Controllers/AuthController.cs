@@ -27,7 +27,7 @@ namespace HomeBankingMinHub.Controllers
             try
             {
                 // Validaciones para login
-                if (String.IsNullOrEmpty(client.Email) || String.IsNullOrEmpty(client.Password))
+                if (string.IsNullOrEmpty(client.Email) || string.IsNullOrEmpty(client.Password))
                 {
                     return StatusCode(400, "Todos los campos son obligatorios");
                 }
