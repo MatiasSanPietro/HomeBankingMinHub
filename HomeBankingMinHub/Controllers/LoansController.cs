@@ -69,7 +69,7 @@ namespace HomeBankingMinHub.Controllers
 
                 if (loanApplicationDTO.Amount <= 0)
                 {
-                    return StatusCode(403, "El monto del prestamo no puede ser 0");
+                    return StatusCode(403, "El monto del prestamo no puede ser 0 o menos");
                 }
 
                 if (String.IsNullOrEmpty(loanApplicationDTO.ToAccountNumber))
@@ -101,7 +101,7 @@ namespace HomeBankingMinHub.Controllers
                     return StatusCode(403, "Cantidad de cuotas no validas");
                 }
 
-                if (loanApplicationDTO.Amount >= loan.MaxAmount)
+                if (loanApplicationDTO.Amount > loan.MaxAmount)
                 {
                     return StatusCode(403, "El monto no puede sobrepasar el maximo autorizado");
                 }
