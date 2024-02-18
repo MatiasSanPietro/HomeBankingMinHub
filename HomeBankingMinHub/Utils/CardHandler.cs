@@ -19,5 +19,10 @@ namespace HomeBankingMinHub.Utils
             }
             return cardNumber.ToString().Trim();
         }
+        public static int GenerateCVV()
+        {
+            Random random = new Random();
+            return random.Next(100, 1000);
+        }
     }
 }

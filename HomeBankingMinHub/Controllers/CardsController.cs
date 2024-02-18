@@ -87,7 +87,7 @@ namespace HomeBankingMinHub.Controllers
                     return StatusCode(403, "Ya existe una tarjeta con el mismo tipo y color");
                 }
 
-                int cvvNum = CardValidations.GenerateCVV();
+                int cvvNum = CardHandler.GenerateCVV();
 
                 Card newCard = new Card()
                 {

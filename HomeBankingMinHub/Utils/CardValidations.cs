@@ -27,11 +27,5 @@ namespace HomeBankingMinHub.Utils
 
             return client.Cards.All(c => c.Type != newCardType || c.Color != newCardColor);
         }
-
-        public static int GenerateCVV()
-        {
-            Random random = new Random();
-            return random.Next(100, 1000);
-        }
     }
 }
