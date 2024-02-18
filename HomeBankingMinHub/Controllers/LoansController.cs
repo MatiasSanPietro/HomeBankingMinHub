@@ -56,15 +56,10 @@ namespace HomeBankingMinHub.Controllers
             try
             {
                 string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
+                
                 if (string.IsNullOrEmpty(email))
                 {
                     return StatusCode(403, "No hay clientes logeados");
-                }
-
-                Client client = _clientRepository.FindByEmail(email);
-                if (client == null)
-                {
-                    return Forbid();
                 }
 
                 if (loanApplicationDTO.Amount <= 0)
@@ -74,7 +69,7 @@ namespace HomeBankingMinHub.Controllers
 
                 if (String.IsNullOrEmpty(loanApplicationDTO.ToAccountNumber))
                 {
-                    return StatusCode(403, "La cuenta de destino no existe");
+                    return StatusCode(403, "Cuenta de destino no proporcionada");
                 }
 
                 if (String.IsNullOrEmpty(loanApplicationDTO.Payments))
@@ -89,11 +84,18 @@ namespace HomeBankingMinHub.Controllers
                     return StatusCode(403, "Tipo de prestamo no valido");
                 }
 
+                Client client = _clientRepository.FindByEmail(email);
+
+                if (client == null)
+                {
+                    return StatusCode(403, "El cliente no existe");
+                }
+
                 var loan = _loanRepository.FindById(loanApplicationDTO.LoanId);
 
                 if (loan == null)
                 {
-                    return Forbid();
+                    return StatusCode(403, "El prestamo no existe");
                 }
 
                 if (!loan.Payments.Split(',').Contains(loanApplicationDTO.Payments))
@@ -110,12 +112,12 @@ namespace HomeBankingMinHub.Controllers
 
                 if (account == null)
                 {
-                    return Forbid();
+                    return StatusCode(403, "La cuenta de destino no existe");
                 }
 
                 if (account.ClientId != client.Id)
                 {
-                    return StatusCode(403, "La cuenta del cliente no existe");
+                    return StatusCode(403, "La cuenta no pertenece al cliente actual");
                 }
 
                 Account updatedAccount = account;

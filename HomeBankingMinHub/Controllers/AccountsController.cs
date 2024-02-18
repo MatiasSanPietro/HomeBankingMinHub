@@ -54,6 +54,7 @@ namespace HomeBankingMindHub.Controllers
             try
             {
                 var account = _accountRepository.FindById(id);
+
                 if (account == null)
                 {
                     return StatusCode(403, "La cuenta no existe");
@@ -88,16 +89,17 @@ namespace HomeBankingMindHub.Controllers
             try
             {
                 string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
+                
                 if (email == string.Empty)
                 {
                     return StatusCode(403, "No hay clientes logeados");
                 }
 
                 Client client = _clientRepository.FindByEmail(email);
-
+                
                 if (client == null)
                 {
-                    return Forbid();
+                    return StatusCode(403, "El cliente no existe");
                 }
 
                 var accountDTO = client.Accounts.Select(ac => new AccountDTO
@@ -122,17 +124,17 @@ namespace HomeBankingMindHub.Controllers
             try
             {
                 string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
+                
                 if (string.IsNullOrEmpty(email))
                 {
                     return StatusCode(403, "No hay clientes logeados");
                 }
 
-                // Buscamos si ya existe el usuario
                 Client client = _clientRepository.FindByEmail(email);
-
+               
                 if (client == null)
                 {
-                    return Forbid();
+                    return StatusCode(403, "El cliente no existe");
                 }
 
                 if (client.Accounts.Count > 2)

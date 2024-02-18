@@ -31,9 +31,13 @@ namespace HomeBankingMinHub.Controllers
                 {
                     return StatusCode(400, "Todos los campos son obligatorios");
                 }
+
                 Client user = _clientRepository.FindByEmail(client.Email);
+
                 if (user == null || !_hasher.VerifyPassword(client.Password, user.Password, user.Salt))
+                {
                     return Unauthorized("Credenciales no validas"); // 401
+                }
 
                 //puedo agregar logica para checkear si el mail es admin, crear entidad usuario
 

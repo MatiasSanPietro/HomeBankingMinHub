@@ -25,6 +25,7 @@ namespace HomeBankingMinHub.Controllers
             try
             {
                 string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
+                
                 if (string.IsNullOrEmpty(email))
                 {
                     return StatusCode(403, "No hay clientes logeados");
@@ -34,7 +35,7 @@ namespace HomeBankingMinHub.Controllers
 
                 if (client == null)
                 {
-                    return Forbid();
+                    return StatusCode(403, "El cliente no existe");
                 }
 
                 var cardDTO = client.Cards.Select(c => new CardDTO
@@ -63,6 +64,7 @@ namespace HomeBankingMinHub.Controllers
             try
             {
                 string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
+                
                 if (string.IsNullOrEmpty(email))
                 {
                     return StatusCode(403, "No hay clientes logeados");
@@ -72,7 +74,7 @@ namespace HomeBankingMinHub.Controllers
 
                 if (client == null)
                 {
-                    return Forbid();
+                    return StatusCode(403, "El cliente no existe");
                 }
 
                 if (CardValidations.CheckCardTypeLimit(client, card))

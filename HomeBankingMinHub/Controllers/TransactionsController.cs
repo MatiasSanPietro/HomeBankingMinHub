@@ -1,7 +1,6 @@
 ﻿using HomeBankingMinHub.Models.DTOs;
 using HomeBankingMinHub.Models;
 using HomeBankingMinHub.Repositories.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HomeBankingMinHub.Controllers
@@ -32,13 +31,8 @@ namespace HomeBankingMinHub.Controllers
                     return StatusCode(403, "No hay clientes logeados");
                 }
 
-                Client client = _clientRepository.FindByEmail(email);
-                if (client == null)
-                {
-                    return Forbid();
-                }
-
-                if (transferDTO.FromAccountNumber == string.Empty || transferDTO.ToAccountNumber == string.Empty)
+                if (string.IsNullOrEmpty(transferDTO.FromAccountNumber) || 
+                    string.IsNullOrEmpty(transferDTO.ToAccountNumber))
                 {
                     return StatusCode(403, "Cuenta de origen o cuenta de destino no proporcionada");
                 }
@@ -48,7 +42,7 @@ namespace HomeBankingMinHub.Controllers
                     return StatusCode(403, "No se permite la transferencia a la misma cuenta");
                 }
 
-                if (transferDTO.Description == string.Empty)
+                if (string.IsNullOrEmpty(transferDTO.Description))
                 {
                     return StatusCode(403, "Descripcion no proporcionada");
                 }
@@ -56,6 +50,13 @@ namespace HomeBankingMinHub.Controllers
                 if (transferDTO.Amount < 0)
                 {
                     return StatusCode(403, "Monto no valido");
+                }
+
+                Client client = _clientRepository.FindByEmail(email);
+
+                if (client == null)
+                {
+                    return StatusCode(403, "El cliente no existe");
                 }
 
                 Account fromAccount = _accountRepository.FindByNumber(transferDTO.FromAccountNumber);

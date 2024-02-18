@@ -8,7 +8,7 @@ namespace HomeBankingMinHub.Pages
     [IgnoreAntiforgeryToken]
     public class ErrorModel : PageModel
     {
-        public string? RequestId { get; set; }
+        public string RequestId { get; set; } // saque el nullable de string?
 
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 

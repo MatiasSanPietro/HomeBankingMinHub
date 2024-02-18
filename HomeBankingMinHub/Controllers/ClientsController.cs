@@ -1,11 +1,9 @@
-﻿using HomeBankingMindHub.Repositories;
-using HomeBankingMinHub.Models;
+﻿using HomeBankingMinHub.Models;
 using HomeBankingMinHub.Models.DTOs;
 using HomeBankingMinHub.Repositories.Interfaces;
 using HomeBankingMinHub.Utils;
 using HomeBankingMinHub.Utils.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Principal;
 
 namespace HomeBankingMindHub.Controllers
 {
@@ -83,6 +81,7 @@ namespace HomeBankingMindHub.Controllers
             try
             {
                 var client = _clientRepository.FindById(id);
+                
                 if (client == null)
                 {
                     return StatusCode(403, "El cliente no existe");
@@ -143,7 +142,12 @@ namespace HomeBankingMindHub.Controllers
 
                 if (!EmailValidations.IsValidEmail(client.Email))
                 {
-                    return StatusCode(400, "La dirección de correo electrónico no es válida");
+                    return StatusCode(400, "La direccion de correo electronico no es valida");
+                }
+
+                if (client.Password.Length <= 8)
+                {
+                    return StatusCode(403, "La contrasenia debe tener por lo menos 8 caracteres");
                 }
 
                 // Buscamos si ya existe el usuario
@@ -151,7 +155,7 @@ namespace HomeBankingMindHub.Controllers
 
                 if (user != null)
                 {
-                    return StatusCode(403, "Email está en uso");
+                    return StatusCode(403, "Email esta en uso");
                 }
 
                 // Hashing de contraseña
@@ -173,7 +177,9 @@ namespace HomeBankingMindHub.Controllers
                 var dbUser = _clientRepository.FindByEmail(newClient.Email);
 
                 if (dbUser == null)
+                {
                     return StatusCode(403, "Error al crear la cuenta, no hay cliente registrado");
+                }
 
                 Account newAccount = new Account
                 {
@@ -206,6 +212,7 @@ namespace HomeBankingMindHub.Controllers
             try
             {
                 string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
+                
                 if (string.IsNullOrEmpty(email))
                 {
                     return StatusCode(403, "No hay clientes logeados");
@@ -215,7 +222,7 @@ namespace HomeBankingMindHub.Controllers
 
                 if (client == null)
                 {
-                    return Forbid();
+                    return StatusCode(403, "El cliente no existe");
                 }
 
                 var clientDTO = new ClientDTO
