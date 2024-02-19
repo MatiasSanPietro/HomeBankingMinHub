@@ -1,7 +1,9 @@
 ﻿using HomeBankingMinHub.Models;
 using HomeBankingMinHub.Models.DTOs;
 using HomeBankingMinHub.Repositories.Interfaces;
+using HomeBankingMinHub.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using static HomeBankingMinHub.Services.AccountService;
 
 namespace HomeBankingMindHub.Controllers
 {
@@ -11,11 +13,13 @@ namespace HomeBankingMindHub.Controllers
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IClientRepository _clientRepository;
+        private readonly IAccountService _accountService;
 
-        public AccountsController(IAccountRepository accountRepository, IClientRepository clientRepository)
+        public AccountsController(IAccountRepository accountRepository, IClientRepository clientRepository, IAccountService accountService)
         {
             _accountRepository = accountRepository;
             _clientRepository = clientRepository;
+            _accountService = accountService;
         }
 
         [HttpGet("accounts")]
@@ -89,14 +93,14 @@ namespace HomeBankingMindHub.Controllers
             try
             {
                 string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
-                
+
                 if (email == string.Empty)
                 {
                     return StatusCode(403, "No hay clientes logeados");
                 }
 
                 Client client = _clientRepository.FindByEmail(email);
-                
+
                 if (client == null)
                 {
                     return StatusCode(403, "El cliente no existe");
@@ -124,41 +128,21 @@ namespace HomeBankingMindHub.Controllers
             try
             {
                 string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
-                
+
                 if (string.IsNullOrEmpty(email))
                 {
                     return StatusCode(403, "No hay clientes logeados");
                 }
 
-                Client client = _clientRepository.FindByEmail(email);
-               
-                if (client == null)
+                try
                 {
-                    return StatusCode(403, "El cliente no existe");
+                    AccountCreateDTO newAccountDTO = _accountService.CreateAccount(email);
+                    return Created("", newAccountDTO);
                 }
-
-                if (client.Accounts.Count > 2)
+                catch (AccountServiceException ex)
                 {
-                    return StatusCode(403, "El cliente ha alcanzado el limite de cuentas");
+                    return StatusCode(403, ex.Message);
                 }
-
-                Account newAccount = new Account
-                {
-                    CreationDate = DateTime.Now,
-                    Balance = 0,
-                    ClientId = client.Id,
-                };
-
-                _accountRepository.Save(newAccount);
-
-                AccountCreateDTO newAccountDTO = new AccountCreateDTO
-                {
-                    CreationDate = newAccount.CreationDate,
-                    Balance = 0,
-                };
-
-                return Created("", newAccountDTO);
-
             }
             catch (Exception ex)
             {

@@ -1,5 +1,4 @@
-﻿using HomeBankingMinHub.Models;
-using HomeBankingMinHub.Models.DTOs;
+﻿using HomeBankingMinHub.Models.DTOs;
 
 namespace HomeBankingMinHub.Services.Interfaces
 {

@@ -145,7 +145,7 @@ namespace HomeBankingMindHub.Controllers
                     return StatusCode(400, "La direccion de correo electronico no es valida");
                 }
 
-                if (client.Password.Length <= 8)
+                if (client.Password.Length < 8)
                 {
                     return StatusCode(403, "La contrasenia debe tener por lo menos 8 caracteres");
                 }

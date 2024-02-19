@@ -16,6 +16,14 @@ namespace HomeBankingMinHub.Services
             _clientRepository = clientRepository;
         }
 
+        // Excepcion personalizada
+        public class AccountServiceException : Exception
+        {
+            public AccountServiceException(string message) : base(message)
+            {
+            }
+        }
+
         public List<AccountDTO> GetAllAccounts()
         {
             var accounts = _accountRepository.GetAllAccounts();
@@ -44,7 +52,7 @@ namespace HomeBankingMinHub.Services
 
             if (account == null)
             {
-                return null;
+                throw new AccountServiceException("El cliente no existe");
             }
 
             var accountDTO = new AccountDTO
@@ -92,12 +100,12 @@ namespace HomeBankingMinHub.Services
 
             if (client == null)
             {
-                return null;
+                throw new AccountServiceException("El cliente no existe");
             }
 
             if (client.Accounts.Count > 2)
             {
-                return null;
+                throw new AccountServiceException("El cliente ha alcanzado el límite de cuentas");
             }
 
             Account newAccount = new Account
