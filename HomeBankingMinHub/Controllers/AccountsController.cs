@@ -9,8 +9,8 @@ namespace HomeBankingMindHub.Controllers
     [ApiController]
     public class AccountsController : ControllerBase
     {
-        private IAccountRepository _accountRepository;
-        private IClientRepository _clientRepository;
+        private readonly IAccountRepository _accountRepository;
+        private readonly IClientRepository _clientRepository;
 
         public AccountsController(IAccountRepository accountRepository, IClientRepository clientRepository)
         {

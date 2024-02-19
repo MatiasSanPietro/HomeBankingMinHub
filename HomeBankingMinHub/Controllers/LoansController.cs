@@ -9,11 +9,11 @@ namespace HomeBankingMinHub.Controllers
     [ApiController]
     public class LoansController : ControllerBase
     {
-        private IClientRepository _clientRepository;
-        private IAccountRepository _accountRepository;
-        private ILoanRepository _loanRepository;
-        private IClientLoanRepository _clientLoanRepository;
-        private ITransactionRepository _transactionRepository;
+        private readonly IClientRepository _clientRepository;
+        private readonly IAccountRepository _accountRepository;
+        private readonly ILoanRepository _loanRepository;
+        private readonly IClientLoanRepository _clientLoanRepository;
+        private readonly ITransactionRepository _transactionRepository;
 
         public LoansController(IClientRepository clientRepository, IAccountRepository accountRepository, ILoanRepository loanRepository, IClientLoanRepository clientLoanRepository, ITransactionRepository transactionRepository)
         {

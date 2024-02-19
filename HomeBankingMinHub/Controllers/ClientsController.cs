@@ -11,9 +11,9 @@ namespace HomeBankingMindHub.Controllers
     [ApiController]
     public class ClientsController : ControllerBase
     {
-        private IClientRepository _clientRepository;
-        private IAccountRepository _accountRepository;
-        private IHasher _hasher;
+        private readonly IClientRepository _clientRepository;
+        private readonly IAccountRepository _accountRepository;
+        private readonly IHasher _hasher;
 
         public ClientsController(IClientRepository clientRepository, IAccountRepository accountRepository,IHasher hasher)
         {

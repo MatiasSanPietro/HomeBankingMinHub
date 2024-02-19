@@ -2,7 +2,6 @@
 using HomeBankingMinHub.Models;
 using HomeBankingMinHub.Repositories.Interfaces;
 using HomeBankingMinHub.Utils;
-using Microsoft.EntityFrameworkCore;
 
 namespace HomeBankingMinHub.Repositories
 {

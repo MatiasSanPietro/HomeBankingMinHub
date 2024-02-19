@@ -2,6 +2,8 @@ using HomeBankingMindHub.Repositories;
 using HomeBankingMinHub.Models;
 using HomeBankingMinHub.Repositories;
 using HomeBankingMinHub.Repositories.Interfaces;
+using HomeBankingMinHub.Services;
+using HomeBankingMinHub.Services.Interfaces;
 using HomeBankingMinHub.Utils.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +38,8 @@ builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<ILoanRepository, LoanRepository>();
 
 builder.Services.AddScoped<IClientLoanRepository, ClientLoanRepository>();
+
+builder.Services.AddScoped<IAccountService, AccountService>();
 
 // Authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

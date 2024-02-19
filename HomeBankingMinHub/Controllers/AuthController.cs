@@ -13,8 +13,8 @@ namespace HomeBankingMinHub.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private IClientRepository _clientRepository;
-        private IHasher _hasher;
+        private readonly IClientRepository _clientRepository;
+        private readonly IHasher _hasher;
         public AuthController(IClientRepository clientRepository, IHasher hasher)
         {
             _clientRepository = clientRepository;
@@ -38,8 +38,6 @@ namespace HomeBankingMinHub.Controllers
                 {
                     return Unauthorized("Credenciales no validas"); // 401
                 }
-
-                //puedo agregar logica para checkear si el mail es admin, crear entidad usuario
 
                 var claims = new List<Claim>
                 {

@@ -10,8 +10,8 @@ namespace HomeBankingMinHub.Controllers
     [ApiController]
     public class CardsController : ControllerBase
     {
-        private IClientRepository _clientRepository;
-        private ICardRepository _cardRepository;
+        private readonly IClientRepository _clientRepository;
+        private readonly ICardRepository _cardRepository;
 
         public CardsController(IClientRepository clientRepository, ICardRepository cardRepository)
         {
