@@ -120,9 +120,6 @@ namespace HomeBankingMinHub.Controllers
                     return StatusCode(403, "La cuenta no pertenece al cliente actual");
                 }
 
-                Account updatedAccount = account;
-                updatedAccount.Balance = account.Balance + loanApplicationDTO.Amount;
-
                 ClientLoan newClientLoan = new ClientLoan
                 {
                     ClientId = client.Id,
@@ -141,6 +138,9 @@ namespace HomeBankingMinHub.Controllers
                     Date = DateTime.Now,
                 };
                 _transactionRepository.Save(newTransaction);
+
+                Account updatedAccount = account;
+                updatedAccount.Balance = account.Balance + loanApplicationDTO.Amount;
                 _accountRepository.Save(account);
 
                 return Ok(newClientLoan);
