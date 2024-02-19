@@ -45,18 +45,21 @@ namespace HomeBankingMindHub.Repositories
             bool condition = true;
             string vin = string.Empty;
 
-            while (condition)
+            if (account.Id == 0)
             {
-                vin = AccountHandler.GenerateAccountNumber();
-
-                var acc = FindByNumber(vin);
-
-                if (acc == null)
+                while (condition)
                 {
-                    condition = false;
+                    vin = AccountHandler.GenerateAccountNumber();
+
+                    var acc = FindByNumber(vin);
+
+                    if (acc == null)
+                    {
+                        condition = false;
+                    }
                 }
+                account.Number = vin;
             }
-            account.Number = vin;
 
             if (account.Id == 0)
             {
