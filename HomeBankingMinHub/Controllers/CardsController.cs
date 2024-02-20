@@ -1,8 +1,7 @@
 ﻿using HomeBankingMinHub.Models.DTOs;
-using HomeBankingMinHub.Models;
-using HomeBankingMinHub.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using HomeBankingMinHub.Utils;
+using HomeBankingMinHub.Services.Interfaces;
+using static HomeBankingMinHub.Services.CardService;
 
 namespace HomeBankingMinHub.Controllers
 {
@@ -10,13 +9,11 @@ namespace HomeBankingMinHub.Controllers
     [ApiController]
     public class CardsController : ControllerBase
     {
-        private readonly IClientRepository _clientRepository;
-        private readonly ICardRepository _cardRepository;
+        private readonly ICardService _cardService;
 
-        public CardsController(IClientRepository clientRepository, ICardRepository cardRepository)
+        public CardsController(ICardService cardService)
         {
-            _clientRepository = clientRepository;
-            _cardRepository = cardRepository;
+            _cardService = cardService;
         }
 
         [HttpGet("clients/current/cards")]
@@ -25,32 +22,18 @@ namespace HomeBankingMinHub.Controllers
             try
             {
                 string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
-                
+
                 if (string.IsNullOrEmpty(email))
                 {
                     return StatusCode(403, "No hay clientes logeados");
                 }
 
-                Client client = _clientRepository.FindByEmail(email);
-
-                if (client == null)
-                {
-                    return StatusCode(403, "El cliente no existe");
-                }
-
-                var cardDTO = client.Cards.Select(c => new CardDTO
-                {
-                    Id = c.Id,
-                    CardHolder = c.CardHolder,
-                    Color = c.Color.ToString(),
-                    Cvv = c.Cvv,
-                    FromDate = c.FromDate,
-                    Number = c.Number,
-                    ThruDate = c.ThruDate,
-                    Type = c.Type.ToString()
-                }).ToList();
-
+                var cardDTO = _cardService.GetCurrentCards(email);
                 return Ok(cardDTO);
+            }
+            catch (CardServiceException ex)
+            {
+                return StatusCode(403, ex.Message);
             }
             catch (Exception ex)
             {
@@ -64,56 +47,19 @@ namespace HomeBankingMinHub.Controllers
             try
             {
                 string email = User.FindFirst("Client") != null ? User.FindFirst("Client").Value : string.Empty;
-                
+
                 if (string.IsNullOrEmpty(email))
                 {
                     return StatusCode(403, "No hay clientes logeados");
                 }
 
-                Client client = _clientRepository.FindByEmail(email);
-
-                if (client == null)
-                {
-                    return StatusCode(403, "El cliente no existe");
-                }
-
-                if (CardValidations.CheckCardTypeLimit(client, card))
-                {
-                    return StatusCode(403, "El cliente ha alcanzado el límite de tarjetas para este tipo");
-                }
-
-                if (!CardValidations.CheckUniqueColorPerCardType(client, card))
-                {
-                    return StatusCode(403, "Ya existe una tarjeta con el mismo tipo y color");
-                }
-
-                int cvvNum = CardHandler.GenerateCVV();
-
-                Card newCard = new Card()
-                {
-                    ClientId = client.Id,
-                    CardHolder = $"{client.FirstName} {client.LastName}",
-                    Type = Enum.Parse<CardType>(card.Type),
-                    Color = Enum.Parse<CardColor>(card.Color),
-                    Cvv = cvvNum,
-                    FromDate = DateTime.Now,
-                    ThruDate = (card.Type == CardType.DEBIT.ToString()) ? DateTime.Now.AddYears(4) : DateTime.Now.AddYears(5),
-                };
-
-                _cardRepository.Save(newCard);
-
-                CardDTO cardDTO = new CardDTO()
-                {
-                    CardHolder = newCard.CardHolder,
-                    Type = newCard.Type.ToString(),
-                    Color = newCard.Color.ToString(),
-                    Number = newCard.Number,
-                    Cvv = newCard.Cvv,
-                    FromDate = newCard.FromDate,
-                    ThruDate = newCard.ThruDate
-                };
-
+                CardDTO cardDTO = _cardService.CreateCard(email, card);
                 return Created("", cardDTO);
+
+            }
+            catch (CardServiceException ex)
+            {
+                return StatusCode(403, ex.Message);
             }
             catch (Exception ex)
             {
