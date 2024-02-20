@@ -52,7 +52,7 @@ namespace HomeBankingMinHub.Services
 
             if (account == null)
             {
-                throw new AccountServiceException("El cliente no existe");
+                throw new AccountServiceException("La cuenta no existe");
             }
 
             var accountDTO = new AccountDTO
@@ -80,7 +80,7 @@ namespace HomeBankingMinHub.Services
 
             if (client == null)
             {
-                return null;
+                throw new AccountServiceException("El cliente no existe");
             }
 
             var accountDTO = client.Accounts.Select(ac => new AccountDTO
@@ -105,7 +105,7 @@ namespace HomeBankingMinHub.Services
 
             if (client.Accounts.Count > 2)
             {
-                throw new AccountServiceException("El cliente ha alcanzado el límite de cuentas");
+                throw new AccountServiceException("El cliente ha alcanzado el limite de cuentas");
             }
 
             Account newAccount = new Account

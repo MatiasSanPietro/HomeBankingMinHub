@@ -12,5 +12,12 @@ namespace HomeBankingMinHub.Models.DTOs
         public ICollection<AccountDTO> Accounts { get; set; }
         public ICollection<ClientLoanDTO> Credits { get; set; }
         public ICollection<CardDTO> Cards { get; set; }
+        //public ClientDTO(Client client)
+        //{
+        //    Id = client.Id;
+        //    FirstName = client.FirstName;
+        //    LastName = client.LastName;
+        //    Email = client.Email;
+        //}
     }
 }

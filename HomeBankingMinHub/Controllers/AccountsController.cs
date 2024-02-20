@@ -11,14 +11,10 @@ namespace HomeBankingMindHub.Controllers
     [ApiController]
     public class AccountsController : ControllerBase
     {
-        private readonly IAccountRepository _accountRepository;
-        private readonly IClientRepository _clientRepository;
         private readonly IAccountService _accountService;
 
-        public AccountsController(IAccountRepository accountRepository, IClientRepository clientRepository, IAccountService accountService)
+        public AccountsController(IAccountService accountService)
         {
-            _accountRepository = accountRepository;
-            _clientRepository = clientRepository;
             _accountService = accountService;
         }
 
@@ -27,23 +23,7 @@ namespace HomeBankingMindHub.Controllers
         {
             try
             {
-                var accounts = _accountRepository.GetAllAccounts();
-                var accountsDTO = accounts.Select(account => new AccountDTO
-                {
-                    Id = account.Id,
-                    Number = account.Number,
-                    CreationDate = account.CreationDate,
-                    Balance = account.Balance,
-                    Transactions = account.Transactions.Select(tr => new TransactionDTO
-                    {
-                        Id = tr.Id,
-                        Type = tr.Type.ToString(),
-                        Amount = tr.Amount,
-                        Description = tr.Description,
-                        Date = tr.Date
-                    }).ToList()
-                }).ToList();
-
+                var accountsDTO = _accountService.GetAllAccounts();
                 return Ok(accountsDTO);
             }
             catch (Exception ex)
@@ -57,30 +37,12 @@ namespace HomeBankingMindHub.Controllers
         {
             try
             {
-                var account = _accountRepository.FindById(id);
-
-                if (account == null)
-                {
-                    return StatusCode(403, "La cuenta no existe");
-                }
-
-                var accountDTO = new AccountDTO
-                {
-                    Id = account.Id,
-                    Number = account.Number,
-                    CreationDate = account.CreationDate,
-                    Balance = account.Balance,
-                    Transactions = account.Transactions.Select(tr => new TransactionDTO
-                    {
-                        Id = tr.Id,
-                        Type = tr.Type.ToString(),
-                        Amount = tr.Amount,
-                        Description = tr.Description,
-                        Date = tr.Date
-                    }).ToList()
-                };
-
+                var accountDTO = _accountService.GetAccountById(id);
                 return Ok(accountDTO);
+            }
+            catch (AccountServiceException ex)
+            {
+                return StatusCode(403, ex.Message);
             }
             catch (Exception ex)
             {
@@ -99,22 +61,14 @@ namespace HomeBankingMindHub.Controllers
                     return StatusCode(403, "No hay clientes logeados");
                 }
 
-                Client client = _clientRepository.FindByEmail(email);
-
-                if (client == null)
-                {
-                    return StatusCode(403, "El cliente no existe");
-                }
-
-                var accountDTO = client.Accounts.Select(ac => new AccountDTO
-                {
-                    Id = ac.Id,
-                    Balance = ac.Balance,
-                    CreationDate = ac.CreationDate,
-                    Number = ac.Number
-                }).ToList();
-
+                var accountDTO = _accountService.GetCurrentAccounts(email);
                 return Ok(accountDTO);
+
+            }
+            catch (AccountServiceException ex)
+            {
+                return StatusCode(403, ex.Message);
+
             }
             catch (Exception ex)
             {
@@ -134,15 +88,13 @@ namespace HomeBankingMindHub.Controllers
                     return StatusCode(403, "No hay clientes logeados");
                 }
 
-                try
-                {
-                    AccountCreateDTO newAccountDTO = _accountService.CreateAccount(email);
-                    return Created("", newAccountDTO);
-                }
-                catch (AccountServiceException ex)
-                {
-                    return StatusCode(403, ex.Message);
-                }
+                AccountCreateDTO newAccountDTO = _accountService.CreateAccount(email);
+                return Created("", newAccountDTO);
+
+            }
+            catch (AccountServiceException ex)
+            {
+                return StatusCode(403, ex.Message);
             }
             catch (Exception ex)
             {
