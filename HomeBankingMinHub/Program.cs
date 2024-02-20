@@ -45,6 +45,8 @@ builder.Services.AddScoped<ICardService, CardService>();
 
 builder.Services.AddScoped<IClientService, ClientService>();
 
+builder.Services.AddScoped<ILoanService, LoanService>();
+
 // Authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
