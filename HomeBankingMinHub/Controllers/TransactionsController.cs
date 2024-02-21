@@ -26,9 +26,7 @@ namespace HomeBankingMinHub.Controllers
                 {
                     return StatusCode(403, "No hay clientes logeados");
                 }
-
                 _transactionService.MakeTransfer(email, transferDTO);
-
                 return Ok("Transferencia realizada con exito");
             }
             catch (TransactionServiceException ex)

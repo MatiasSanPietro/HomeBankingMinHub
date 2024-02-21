@@ -3,7 +3,7 @@
     public class Client
     {
         // prop
-        // [Key] -- anotacion por si mi Id tiene otro nombre
+        // [Key]
         public long Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

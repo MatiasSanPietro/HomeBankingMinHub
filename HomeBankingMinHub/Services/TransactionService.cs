@@ -24,7 +24,7 @@ namespace HomeBankingMinHub.Services
 
         public void MakeTransfer(string email, TransferDTO transferDTO)
         {
-            Client client = _clientRepository.FindByEmail(email);
+            var client = _clientRepository.FindByEmail(email);
 
             if (string.IsNullOrEmpty(transferDTO.FromAccountNumber) ||
                 string.IsNullOrEmpty(transferDTO.ToAccountNumber))
@@ -52,7 +52,7 @@ namespace HomeBankingMinHub.Services
                 throw new TransactionServiceException("El cliente no existe");
             }
 
-            Account fromAccount = _accountRepository.FindByNumber(transferDTO.FromAccountNumber);
+            var fromAccount = _accountRepository.FindByNumber(transferDTO.FromAccountNumber);
 
             if (fromAccount == null)
             {
@@ -69,7 +69,7 @@ namespace HomeBankingMinHub.Services
                 throw new TransactionServiceException("Fondos insuficientes");
             }
 
-            Account toAccount = _accountRepository.FindByNumber(transferDTO.ToAccountNumber);
+            var toAccount = _accountRepository.FindByNumber(transferDTO.ToAccountNumber);
 
             if (toAccount == null)
             {

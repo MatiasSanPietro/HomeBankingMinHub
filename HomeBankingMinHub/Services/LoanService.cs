@@ -67,7 +67,7 @@ namespace HomeBankingMinHub.Services
                 throw new LoanServiceException("Tipo de prestamo no valido");
             }
 
-            Client client = _clientRepository.FindByEmail(email);
+            var client = _clientRepository.FindByEmail(email);
 
             if (client == null)
             {
@@ -103,7 +103,7 @@ namespace HomeBankingMinHub.Services
                 throw new LoanServiceException("La cuenta no pertenece al cliente actual");
             }
 
-            ClientLoan newClientLoan = new ClientLoan
+            ClientLoan newClientLoan = new()
             {
                 ClientId = client.Id,
                 LoanId = loanApplicationDTO.LoanId,
@@ -112,7 +112,7 @@ namespace HomeBankingMinHub.Services
             };
             _clientLoanRepository.Save(newClientLoan);
 
-            Transaction newTransaction = new Transaction
+            Transaction newTransaction = new()
             {
                 Amount = loanApplicationDTO.Amount,
                 Description = $"{loan.Name} loan approved",

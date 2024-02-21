@@ -76,7 +76,7 @@ namespace HomeBankingMinHub.Services
 
         public IEnumerable<AccountDTO> GetCurrentAccounts(string email)
         {
-            Client client = _clientRepository.FindByEmail(email);
+            var client = _clientRepository.FindByEmail(email);
 
             if (client == null)
             {
@@ -96,7 +96,7 @@ namespace HomeBankingMinHub.Services
 
         public AccountCreateDTO CreateAccount(string email)
         {
-            Client client = _clientRepository.FindByEmail(email);
+            var client = _clientRepository.FindByEmail(email);
 
             if (client == null)
             {
@@ -108,7 +108,7 @@ namespace HomeBankingMinHub.Services
                 throw new AccountServiceException("El cliente ha alcanzado el limite de cuentas");
             }
 
-            Account newAccount = new Account
+            Account newAccount = new()
             {
                 CreationDate = DateTime.Now,
                 Balance = 0,
@@ -117,7 +117,7 @@ namespace HomeBankingMinHub.Services
 
             _accountRepository.Save(newAccount);
 
-            AccountCreateDTO newAccountDTO = new AccountCreateDTO
+            AccountCreateDTO newAccountDTO = new()
             {
                 CreationDate = newAccount.CreationDate,
                 Balance = 0,

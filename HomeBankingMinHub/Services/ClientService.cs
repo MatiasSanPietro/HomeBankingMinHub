@@ -26,6 +26,7 @@ namespace HomeBankingMinHub.Services
             {
             }
         }
+
         public List<ClientDTO> GetAllClients()
         {
             var clients = _clientRepository.GetAllClients();
@@ -136,7 +137,7 @@ namespace HomeBankingMinHub.Services
             }
 
             // Buscamos si ya existe el usuario
-            Client user = _clientRepository.FindByEmail(client.Email);
+            var user = _clientRepository.FindByEmail(client.Email);
 
             if (user != null)
             {
@@ -147,7 +148,7 @@ namespace HomeBankingMinHub.Services
             string salt;
             string hashedPassword = _hasher.HashPassword(client.Password, out salt);
 
-            Client newClient = new Client
+            Client newClient = new()
             {
                 Email = client.Email,
                 Password = hashedPassword,
@@ -166,7 +167,7 @@ namespace HomeBankingMinHub.Services
                 throw new ClientServiceException("Error al crear la cuenta, no hay cliente registrado");
             }
 
-            Account newAccount = new Account
+            Account newAccount = new()
             {
                 ClientId = dbUser.Id,
                 CreationDate = DateTime.Now,
@@ -178,7 +179,7 @@ namespace HomeBankingMinHub.Services
 
         public ClientDTO GetCurrentClient(string email)
         {
-            Client client = _clientRepository.FindByEmail(email);
+            var client = _clientRepository.FindByEmail(email);
 
             if (client == null)
             {

@@ -26,7 +26,7 @@ namespace HomeBankingMinHub.Services
 
         public List<CardDTO> GetCurrentCards(string email)
         {
-            Client client = _clientRepository.FindByEmail(email);
+            var client = _clientRepository.FindByEmail(email);
 
             if (client == null)
             {
@@ -50,7 +50,7 @@ namespace HomeBankingMinHub.Services
 
         public CardDTO CreateCard(string email, CardDTO card)
         {
-            Client client = _clientRepository.FindByEmail(email);
+            var client = _clientRepository.FindByEmail(email);
 
             if (client == null)
             {
@@ -69,7 +69,7 @@ namespace HomeBankingMinHub.Services
 
             int cvvNum = CardHandler.GenerateCVV();
 
-            Card newCard = new Card()
+            Card newCard = new()
             {
                 ClientId = client.Id,
                 CardHolder = $"{client.FirstName} {client.LastName}",
@@ -82,7 +82,7 @@ namespace HomeBankingMinHub.Services
 
             _cardRepository.Save(newCard);
 
-            CardDTO cardDTO = new CardDTO()
+            CardDTO cardDTO = new()
             {
                 CardHolder = newCard.CardHolder,
                 Type = newCard.Type.ToString(),
