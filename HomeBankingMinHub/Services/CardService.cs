@@ -33,17 +33,12 @@ namespace HomeBankingMinHub.Services
                 throw new CardServiceException("El cliente no existe");
             }
 
-            var cardDTO = client.Cards.Select(c => new CardDTO
+            List<CardDTO> cardDTO = new List<CardDTO>();
+
+            foreach (var card in client.Cards)
             {
-                Id = c.Id,
-                CardHolder = c.CardHolder,
-                Color = c.Color.ToString(),
-                Cvv = c.Cvv,
-                FromDate = c.FromDate,
-                Number = c.Number,
-                ThruDate = c.ThruDate,
-                Type = c.Type.ToString()
-            }).ToList();
+                cardDTO.Add(new CardDTO(card));
+            }
 
             return cardDTO;
         }
@@ -82,16 +77,7 @@ namespace HomeBankingMinHub.Services
 
             _cardRepository.Save(newCard);
 
-            CardDTO cardDTO = new()
-            {
-                CardHolder = newCard.CardHolder,
-                Type = newCard.Type.ToString(),
-                Color = newCard.Color.ToString(),
-                Number = newCard.Number,
-                Cvv = newCard.Cvv,
-                FromDate = newCard.FromDate,
-                ThruDate = newCard.ThruDate
-            };
+            var cardDTO = new CardDTO();
 
             return cardDTO;
         }

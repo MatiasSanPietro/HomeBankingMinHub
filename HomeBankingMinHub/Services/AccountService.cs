@@ -27,21 +27,12 @@ namespace HomeBankingMinHub.Services
         public List<AccountDTO> GetAllAccounts()
         {
             var accounts = _accountRepository.GetAllAccounts();
-            var accountsDTO = accounts.Select(account => new AccountDTO
+            List<AccountDTO> accountsDTO = new List<AccountDTO>();
+
+            foreach (var account in accounts)
             {
-                Id = account.Id,
-                Number = account.Number,
-                CreationDate = account.CreationDate,
-                Balance = account.Balance,
-                Transactions = account.Transactions.Select(tr => new TransactionDTO
-                {
-                    Id = tr.Id,
-                    Type = tr.Type.ToString(),
-                    Amount = tr.Amount,
-                    Description = tr.Description,
-                    Date = tr.Date
-                }).ToList()
-            }).ToList();
+                accountsDTO.Add(new AccountDTO(account));
+            }
 
             return accountsDTO;
         }
@@ -55,21 +46,7 @@ namespace HomeBankingMinHub.Services
                 throw new AccountServiceException("La cuenta no existe");
             }
 
-            var accountDTO = new AccountDTO
-            {
-                Id = account.Id,
-                Number = account.Number,
-                CreationDate = account.CreationDate,
-                Balance = account.Balance,
-                Transactions = account.Transactions.Select(tr => new TransactionDTO
-                {
-                    Id = tr.Id,
-                    Type = tr.Type.ToString(),
-                    Amount = tr.Amount,
-                    Description = tr.Description,
-                    Date = tr.Date
-                }).ToList()
-            };
+            var accountDTO = new AccountDTO(account);
 
             return accountDTO;
         }

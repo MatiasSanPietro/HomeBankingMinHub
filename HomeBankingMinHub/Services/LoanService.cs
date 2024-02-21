@@ -30,17 +30,12 @@ namespace HomeBankingMinHub.Services
             var loans = _loanRepository.GetAllLoans();
             var loansDTO = new List<LoanDTO>();
 
-            foreach (Loan loan in loans)
+            foreach (var loan in loans)
             {
-                var newLoanDTO = new LoanDTO
-                {
-                    Id = loan.Id,
-                    Name = loan.Name,
-                    MaxAmount = loan.MaxAmount,
-                    Payments = loan.Payments,
-                };
-                loansDTO.Add(newLoanDTO);
+                LoanDTO loanDTO = new LoanDTO(loan);
+                loansDTO.Add(loanDTO);
             }
+
             return loansDTO;
         }
         ClientLoan ILoanService.ApplyForLoan(string email, LoanApplicationDTO loanApplicationDTO)
