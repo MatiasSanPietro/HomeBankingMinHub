@@ -35,7 +35,7 @@ namespace HomeBankingMinHub.Repositories
 
         public void Save(Card card)
         {
-            bool condition = true;
+            bool condition = true; // aca
             string num = string.Empty;
 
             while (condition)

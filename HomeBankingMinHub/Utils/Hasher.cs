@@ -6,6 +6,8 @@ namespace HomeBankingMinHub.Models
 {
     public class Hasher : IHasher
     {
+        // Genero 32 bytes de datos aleatorios, se pasa al salt, se concatena con la
+        // contraseña y se calcula el hash con SHA256
         public string HashPassword(string password, out string salt)
         {
             using (var rng = RandomNumberGenerator.Create())
@@ -24,6 +26,8 @@ namespace HomeBankingMinHub.Models
             }
         }
 
+        // Toma el salt asociado a la contraseña, se contatenan y se utiliza SHA256
+        // para calcular el hash de la contraseña
         public bool VerifyPassword(string password, string hashedPassword, string salt)
         {
             using (var sha256 = SHA256.Create())

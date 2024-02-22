@@ -59,7 +59,7 @@ namespace HomeBankingMinHub.Services
             {
                 throw new AccountServiceException("El cliente no existe");
             }
-
+            // aca
             var accountDTO = client.Accounts.Select(ac => new AccountDTO
             {
                 Id = ac.Id,

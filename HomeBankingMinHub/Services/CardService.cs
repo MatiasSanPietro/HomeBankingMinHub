@@ -77,7 +77,17 @@ namespace HomeBankingMinHub.Services
 
             _cardRepository.Save(newCard);
 
-            var cardDTO = new CardDTO();
+            //var cardDTO = new CardDTO();
+
+            var cardDTO = new CardDTO
+            {
+                CardHolder = newCard.CardHolder,
+                Type = newCard.Type.ToString(),
+                Color = newCard.Color.ToString(),
+                Cvv = newCard.Cvv,
+                FromDate = newCard.FromDate,
+                ThruDate = newCard.ThruDate
+            };
 
             return cardDTO;
         }
