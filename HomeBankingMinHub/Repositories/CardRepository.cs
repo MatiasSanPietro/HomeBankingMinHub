@@ -35,21 +35,15 @@ namespace HomeBankingMinHub.Repositories
 
         public void Save(Card card)
         {
-            bool condition = true; // aca
-            string num = string.Empty;
+            string num;
 
-            while (condition)
+            do
             {
                 num = CardHandler.GenerateCardNumber();
+            } while (FindByNum(num) != null);
 
-                var acc = FindByNum(num);
-
-                if (acc == null)
-                {
-                    condition = false;
-                }
-            }
             card.Number = num;
+
             Create(card);
             SaveChanges();
         }

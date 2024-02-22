@@ -59,14 +59,13 @@ namespace HomeBankingMinHub.Services
             {
                 throw new AccountServiceException("El cliente no existe");
             }
-            // aca
-            var accountDTO = client.Accounts.Select(ac => new AccountDTO
+
+            List<AccountDTO> accountDTO = new List<AccountDTO>();
+
+            foreach ( var account in client.Accounts)
             {
-                Id = ac.Id,
-                Balance = ac.Balance,
-                CreationDate = ac.CreationDate,
-                Number = ac.Number
-            }).ToList();
+                accountDTO.Add(new AccountDTO(account));
+            }
 
             return accountDTO;
         }
@@ -94,11 +93,7 @@ namespace HomeBankingMinHub.Services
 
             _accountRepository.Save(newAccount);
 
-            AccountCreateDTO newAccountDTO = new()
-            {
-                CreationDate = newAccount.CreationDate,
-                Balance = 0,
-            };
+            AccountCreateDTO newAccountDTO = new(newAccount);
 
             return newAccountDTO;
         }

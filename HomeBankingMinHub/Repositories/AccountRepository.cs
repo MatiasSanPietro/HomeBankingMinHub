@@ -42,22 +42,15 @@ namespace HomeBankingMindHub.Repositories
 
         public void Save(Account account)
         {
-            bool condition = true; // aca
-            string vin = string.Empty;
+            string vin;
 
             if (account.Id == 0)
             {
-                while (condition)
+                do
                 {
                     vin = AccountHandler.GenerateAccountNumber();
+                } while (FindByNumber(vin) != null);
 
-                    var acc = FindByNumber(vin);
-
-                    if (acc == null)
-                    {
-                        condition = false;
-                    }
-                }
                 account.Number = vin;
             }
 

@@ -22,8 +22,8 @@
             FromDate = card.FromDate;
             ThruDate = card.ThruDate;
         }
-        public CardDTO() 
-        { 
+        public CardDTO()
+        {
 
         }
     }
