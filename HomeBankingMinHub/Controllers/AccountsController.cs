@@ -83,8 +83,8 @@ namespace HomeBankingMindHub.Controllers
                 {
                     return StatusCode(403, "No hay clientes logeados");
                 }
-                AccountCreateDTO newAccountDTO = _accountService.CreateAccount(email);
-                return Created("", newAccountDTO);
+                var newAccountCreateDTO = _accountService.CreateAccount(email);
+                return Created("", newAccountCreateDTO);
             }
             catch (AccountServiceException ex)
             {

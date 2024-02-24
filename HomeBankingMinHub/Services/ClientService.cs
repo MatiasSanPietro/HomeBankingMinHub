@@ -32,10 +32,9 @@ namespace HomeBankingMinHub.Services
             var clients = _clientRepository.GetAllClients();
             var clientsDTO = new List<ClientDTO>();
 
-            foreach (Client client in clients)
+            foreach (var client in clients)
             {
-                ClientDTO clientDTO = new ClientDTO(client);
-                clientsDTO.Add(clientDTO);
+                clientsDTO.Add(new ClientDTO(client));
             }
 
             return clientsDTO;
@@ -86,7 +85,7 @@ namespace HomeBankingMinHub.Services
             string salt;
             string hashedPassword = _hasher.HashPassword(client.Password, out salt);
 
-            Client newClient = new()
+            var newClient = new Client()
             {
                 Email = client.Email,
                 Password = hashedPassword,
@@ -105,13 +104,15 @@ namespace HomeBankingMinHub.Services
                 throw new ClientServiceException("Error al crear la cuenta, no hay cliente registrado");
             }
 
-            Account newAccount = new()
+            var newAccount = new Account()
             {
                 ClientId = dbUser.Id,
                 CreationDate = DateTime.Now,
                 Balance = 0
             };
+
             _accountRepository.Save(newAccount);
+
             return newClient;
         }
 

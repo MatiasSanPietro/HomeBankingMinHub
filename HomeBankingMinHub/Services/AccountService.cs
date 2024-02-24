@@ -62,7 +62,7 @@ namespace HomeBankingMinHub.Services
 
             List<AccountDTO> accountDTO = new List<AccountDTO>();
 
-            foreach ( var account in client.Accounts)
+            foreach (var account in client.Accounts)
             {
                 accountDTO.Add(new AccountDTO(account));
             }
@@ -93,7 +93,7 @@ namespace HomeBankingMinHub.Services
 
             _accountRepository.Save(newAccount);
 
-            AccountCreateDTO newAccountDTO = new(newAccount);
+            var newAccountDTO = new AccountCreateDTO(newAccount);
 
             return newAccountDTO;
         }

@@ -41,7 +41,7 @@ namespace HomeBankingMinHub.Controllers
                 {
                     return StatusCode(403, "No hay clientes logeados");
                 }
-                ClientLoan newClientLoan = _loanService.ApplyForLoan(email, loanApplicationDTO);
+                var newClientLoan = _loanService.ApplyForLoan(email, loanApplicationDTO);
                 return Ok(newClientLoan);
             }
             catch (LoanServiceException ex)

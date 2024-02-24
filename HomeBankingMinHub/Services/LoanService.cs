@@ -21,24 +21,26 @@ namespace HomeBankingMinHub.Services
             _clientLoanRepository = clientLoanRepository;
             _transactionRepository = transactionRepository;
         }
+
         public class LoanServiceException : Exception
         {
             public LoanServiceException(string message) : base(message) { }
         }
-        List<LoanDTO> ILoanService.GetAllLoans()
+
+        public List<LoanDTO> GetAllLoans()
         {
             var loans = _loanRepository.GetAllLoans();
             var loansDTO = new List<LoanDTO>();
 
             foreach (var loan in loans)
             {
-                LoanDTO loanDTO = new LoanDTO(loan);
-                loansDTO.Add(loanDTO);
+                loansDTO.Add (new LoanDTO(loan));
             }
 
             return loansDTO;
         }
-        ClientLoan ILoanService.ApplyForLoan(string email, LoanApplicationDTO loanApplicationDTO)
+
+        public ClientLoan ApplyForLoan(string email, LoanApplicationDTO loanApplicationDTO)
         {
             if (loanApplicationDTO.Amount <= 0)
             {
@@ -98,16 +100,17 @@ namespace HomeBankingMinHub.Services
                 throw new LoanServiceException("La cuenta no pertenece al cliente actual");
             }
 
-            ClientLoan newClientLoan = new()
+            var newClientLoan = new ClientLoan()
             {
                 ClientId = client.Id,
                 LoanId = loanApplicationDTO.LoanId,
                 Amount = loanApplicationDTO.Amount + (loanApplicationDTO.Amount * 0.2),
                 Payments = loanApplicationDTO.Payments,
             };
+
             _clientLoanRepository.Save(newClientLoan);
 
-            Transaction newTransaction = new()
+            var newTransaction = new Transaction()
             {
                 Amount = loanApplicationDTO.Amount,
                 Description = $"{loan.Name} loan approved",
@@ -115,10 +118,13 @@ namespace HomeBankingMinHub.Services
                 AccountId = account.Id,
                 Date = DateTime.Now,
             };
+
             _transactionRepository.Save(newTransaction);
 
             Account updatedAccount = account;
+
             updatedAccount.Balance = account.Balance + loanApplicationDTO.Amount;
+
             _accountRepository.Save(account);
 
             return newClientLoan;

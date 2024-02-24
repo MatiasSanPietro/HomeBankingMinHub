@@ -4,11 +4,10 @@
     {
         public static string GenerateAccountNumber()
         {
-            Random random = new Random();
-            string number = random.Next(0, 100000000).ToString("D8");
+            var random = new Random();
+            string number = random.Next(100000000).ToString("D8");
 
-            string result = $"VIN-{number}";
-            return result;
+            return $"VIN-{number}";
         }
     }
 }

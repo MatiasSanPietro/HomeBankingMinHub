@@ -12,20 +12,19 @@ namespace HomeBankingMinHub.Utils
             int debitCardCount = client.Cards.Count(c => c.Type == CardType.DEBIT);
             int creditCardCount = client.Cards.Count(c => c.Type == CardType.CREDIT);
 
-            CardType newCardType = Enum.Parse<CardType>(card.Type);
+            var newCardType = Enum.Parse<CardType>(card.Type);
 
             return (newCardType == CardType.DEBIT && debitCardCount > 2) ||
                    (newCardType == CardType.CREDIT && creditCardCount > 2);
         }
 
-        // Verifico en todas las tarjetas del cliente si la nueva tarjeta no tiene
-        // el mismo color y tipo
-        public static bool CheckUniqueColorPerCardType(Client client, CardDTO card)
+        // Verifico si alguna de las cartas del cliente tiene el mismo tipo y color de la nueva carta
+        public static bool CheckCardTypeAndColor(Client client, CardDTO card)
         {
-            CardType newCardType = Enum.Parse<CardType>(card.Type);
-            CardColor newCardColor = Enum.Parse<CardColor>(card.Color);
+            var newCardType = Enum.Parse<CardType>(card.Type);
+            var newCardColor = Enum.Parse<CardColor>(card.Color);
 
-            return client.Cards.All(c => c.Type != newCardType || c.Color != newCardColor);
+            return client.Cards.Any(c => c.Type == newCardType && c.Color == newCardColor);
         }
     }
 }

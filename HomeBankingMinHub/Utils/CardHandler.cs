@@ -6,22 +6,22 @@ namespace HomeBankingMinHub.Utils
     {
         public static string GenerateCardNumber()
         {
-            Random random = new();
-            StringBuilder cardNumber = new StringBuilder();
+            var random = new Random();
+            var cardNumber = new StringBuilder();
 
             for (int i = 0; i < 4; i++)
             {
-                cardNumber.AppendFormat("{0:D4}", random.Next(0, 10000));
+                cardNumber.Append(random.Next(10000).ToString("D4"));
                 if (i < 3)
                 {
                     cardNumber.Append('-');
                 }
             }
-            return cardNumber.ToString().Trim();
+            return cardNumber.ToString();
         }
         public static int GenerateCVV()
         {
-            Random random = new Random();
+            var random = new Random();
             return random.Next(100, 1000);
         }
     }

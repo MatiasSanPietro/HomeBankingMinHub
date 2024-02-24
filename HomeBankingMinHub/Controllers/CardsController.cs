@@ -52,7 +52,7 @@ namespace HomeBankingMinHub.Controllers
                     return StatusCode(403, "No hay clientes logeados");
                 }
 
-                CardDTO cardDTO = _cardService.CreateCard(email, card);
+                var cardDTO = _cardService.CreateCard(email, card);
                 return Created("", cardDTO);
             }
             catch (CardServiceException ex)

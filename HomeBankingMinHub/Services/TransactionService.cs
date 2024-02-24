@@ -17,6 +17,7 @@ namespace HomeBankingMinHub.Services
             _accountRepository = accountRepository;
             _transactionRepository = transactionRepository;
         }
+
         public class TransactionServiceException : Exception
         {
             public TransactionServiceException(string message) : base(message) { }
@@ -77,23 +78,27 @@ namespace HomeBankingMinHub.Services
             }
 
             // Insertar transacciones para la transferencia
-            _transactionRepository.Save(new Transaction
+            var newDebitTransaction = new Transaction()
             {
                 Type = TransactionType.DEBIT,
                 Amount = transferDTO.Amount * -1,
                 Description = $"{transferDTO.Description} {toAccount.Number}",
                 AccountId = fromAccount.Id,
                 Date = DateTime.Now,
-            });
+            };
 
-            _transactionRepository.Save(new Transaction
+            _transactionRepository.Save(newDebitTransaction);
+
+            var newCreditTransaction = new Transaction()
             {
                 Type = TransactionType.CREDIT,
                 Amount = transferDTO.Amount,
                 Description = $"{transferDTO.Description} {fromAccount.Number}",
                 AccountId = toAccount.Id,
                 Date = DateTime.Now,
-            });
+            };
+
+            _transactionRepository.Save(newCreditTransaction);
 
             // Actualizar saldos de cuentas
             fromAccount.Balance -= transferDTO.Amount;

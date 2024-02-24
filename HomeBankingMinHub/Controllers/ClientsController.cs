@@ -54,7 +54,7 @@ namespace HomeBankingMindHub.Controllers
         {
             try
             {
-                Client newClient = _clientService.CreateClient(client);
+                var newClient = _clientService.CreateClient(client);
                 return Created("", newClient);
             }
             catch (ClientServiceException ex)
@@ -78,7 +78,7 @@ namespace HomeBankingMindHub.Controllers
                 {
                     return StatusCode(403, "No hay clientes logeados");
                 }
-                ClientDTO clientDTO = _clientService.GetCurrentClient(email);   
+                var clientDTO = _clientService.GetCurrentClient(email);   
                 return Ok(clientDTO);
             }
             catch (ClientServiceException ex)

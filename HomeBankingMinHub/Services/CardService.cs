@@ -57,14 +57,14 @@ namespace HomeBankingMinHub.Services
                 throw new CardServiceException("El cliente ha alcanzado el límite de tarjetas para este tipo");
             }
 
-            if (!CardValidations.CheckUniqueColorPerCardType(client, card))
+            if (CardValidations.CheckCardTypeAndColor(client, card))
             {
                 throw new CardServiceException("Ya existe una tarjeta con el mismo tipo y color");
             }
 
             int cvvNum = CardHandler.GenerateCVV();
 
-            Card newCard = new()
+            var newCard = new Card()
             {
                 ClientId = client.Id,
                 CardHolder = $"{client.FirstName} {client.LastName}",
