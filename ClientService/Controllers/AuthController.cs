@@ -1,14 +1,13 @@
-﻿using HomeBankingMinHub.Models;
-using HomeBankingMinHub.Repositories.Interfaces;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using ClientService.Models;
 using ClientService.Utils.Interfaces;
 using ClientService.Models.DTOs;
+using ClientService.Repositories.Interfaces;
 
-namespace HomeBankingMinHub.Controllers
+namespace ClientService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

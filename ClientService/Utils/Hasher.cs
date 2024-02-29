@@ -2,7 +2,7 @@
 using System.Text;
 using ClientService.Utils.Interfaces;
 
-namespace HomeBankingMinHub.Models
+namespace ClientService.Models
 {
     public class Hasher : IHasher
     {

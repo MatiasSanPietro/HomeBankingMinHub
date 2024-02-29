@@ -1,8 +1,7 @@
 using ClientService.Models;
 using ClientService.Utils.Interfaces;
-using HomeBankingMindHub.Repositories;
-using HomeBankingMinHub.Models;
-using HomeBankingMinHub.Repositories.Interfaces;
+using ClientService.Repositories;
+using ClientService.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 // todavia no cambio el front para recibir mis endpoints, applicationUrl en http properties

@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using TransactionService.Models;
+using TransactionService.Repositories;
+using TransactionService.Repositories.Interfaces;
 // todavia no cambio el front para recibir mis endpoints, applicationUrl en http properties
 
 var MyAllowOriginsSpecifics = "_myAllowOriginsSpecifics";
@@ -23,6 +25,7 @@ builder.Services.AddDbContext<TransactionServiceContext>(options =>
 options.UseMySQL(builder.Configuration.GetConnectionString("ConexionDatabase")));
 
 // Add services to the container.
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

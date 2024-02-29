@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 
-namespace ClientService.Repositories.Interfaces
+namespace TransactionService.Repositories.Interfaces
 {
     public interface IRepositoryBase<T>
     {

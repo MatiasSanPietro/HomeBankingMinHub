@@ -1,16 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using ClientService.Repositories.Interfaces;
-using ClientService.Models;
+using TransactionService.Repositories.Interfaces;
+using TransactionService.Models;
 
-namespace ClientService.Repositories
+namespace TransactionService.Repositories
 {
     public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
-        protected ClientServiceContext RepositoryContext { get; set; }
+        protected TransactionServiceContext RepositoryContext { get; set; }
 
-        public RepositoryBase(ClientServiceContext repositoryContext)
+        public RepositoryBase(TransactionServiceContext repositoryContext)
         {
             this.RepositoryContext = repositoryContext;
         }

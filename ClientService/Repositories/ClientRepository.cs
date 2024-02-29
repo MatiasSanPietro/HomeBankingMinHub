@@ -1,9 +1,7 @@
 ﻿using ClientService.Models;
-using HomeBankingMinHub.Models;
-using HomeBankingMinHub.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore;
+using ClientService.Repositories.Interfaces;
 
-namespace HomeBankingMindHub.Repositories
+namespace ClientService.Repositories
 {
     public class ClientRepository : RepositoryBase<Client>, IClientRepository
     {
