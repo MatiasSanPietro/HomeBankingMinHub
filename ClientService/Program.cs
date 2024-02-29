@@ -2,7 +2,20 @@ using ClientService.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
+var AllowOriginsSpecifics = "_AllowOriginsSpecifics";
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(AllowOriginsSpecifics,
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5077") //puedo agregar mas origenes
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+        });
+});
 
 // Add DbContext to the container
 builder.Services.AddDbContext<ClientServiceContext>(options =>
@@ -37,6 +50,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(AllowOriginsSpecifics);
 
 app.UseAuthorization();
 
