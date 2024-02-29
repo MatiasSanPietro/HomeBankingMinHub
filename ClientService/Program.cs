@@ -4,6 +4,8 @@ using ClientService.Repositories;
 using ClientService.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using ClientService.RemoteService.Interfaces;
+using ClientService.RemoteService;
 // todavia no cambio el front para recibir mis endpoints, applicationUrl en http properties
 
 var MyAllowOriginsSpecifics = "_myAllowOriginsSpecifics";
@@ -27,10 +29,15 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("HomeBankingConex
 
 // Add services to the container.
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<IHasher, Hasher>();
 
+builder.Services.AddHttpClient("Transaction", config =>
+{
+    config.BaseAddress = new Uri(builder.Configuration["Services:Transaction"]);
+});
+
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
