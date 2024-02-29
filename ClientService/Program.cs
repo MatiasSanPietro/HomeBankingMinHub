@@ -1,16 +1,18 @@
 using ClientService.Models;
+using ClientService.Utils.Interfaces;
 using HomeBankingMindHub.Repositories;
+using HomeBankingMinHub.Models;
 using HomeBankingMinHub.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
-var AllowOriginsSpecifics = "_AllowOriginsSpecifics";
+var MyAllowOriginsSpecifics = "_myAllowOriginsSpecifics";
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(AllowOriginsSpecifics,
+    options.AddPolicy(MyAllowOriginsSpecifics,
         policy =>
         {
             policy.WithOrigins("http://localhost:5077") //puedo agregar mas origenes
@@ -25,6 +27,7 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("HomeBankingConex
 
 // Add services to the container.
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
+builder.Services.AddScoped<IHasher, Hasher>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -54,7 +57,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors(AllowOriginsSpecifics);
+app.UseCors(MyAllowOriginsSpecifics);
 
 app.UseAuthorization();
 
