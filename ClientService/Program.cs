@@ -1,4 +1,6 @@
 using ClientService.Models;
+using HomeBankingMindHub.Repositories;
+using HomeBankingMinHub.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,6 +24,7 @@ builder.Services.AddDbContext<ClientServiceContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("HomeBankingConexion")));
 
 // Add services to the container.
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
