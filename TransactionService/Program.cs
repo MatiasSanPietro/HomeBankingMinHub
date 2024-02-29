@@ -1,10 +1,6 @@
-using ClientService.Models;
-using ClientService.Utils.Interfaces;
-using HomeBankingMindHub.Repositories;
-using HomeBankingMinHub.Models;
-using HomeBankingMinHub.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using TransactionService.Models;
 // todavia no cambio el front para recibir mis endpoints, applicationUrl en http properties
 
 var MyAllowOriginsSpecifics = "_myAllowOriginsSpecifics";
@@ -23,12 +19,10 @@ builder.Services.AddCors(options =>
 });
 
 // Add DbContext to the container
-builder.Services.AddDbContext<ClientServiceContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("HomeBankingConexion")));
+builder.Services.AddDbContext<TransactionServiceContext>(options => 
+options.UseMySQL(builder.Configuration.GetConnectionString("ConexionDatabase")));
 
 // Add services to the container.
-builder.Services.AddScoped<IClientRepository, ClientRepository>();
-builder.Services.AddScoped<IHasher, Hasher>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
